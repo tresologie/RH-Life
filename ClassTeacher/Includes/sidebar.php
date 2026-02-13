@@ -8,7 +8,7 @@
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">
         <a class="nav-link" href="index.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <i class="fas fa-fw fa-tachometer-alt" style="color: blue;"></i>
           <span>Tableau de bord</span></a>
       </li> 
       <hr class="sidebar-divider">
@@ -19,7 +19,7 @@
        <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap2"
           aria-expanded="true" aria-controls="collapseBootstrap2">
-          <i class="fas fa-user-graduate"></i>
+          <i class="fas fa-user-graduate" style="color: blue;"></i>
           <span>Gérer les employés</span>
         </a>
         <div id="collapseBootstrap2" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
@@ -40,7 +40,7 @@
        <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrapcon"
           aria-expanded="true" aria-controls="collapseBootstrapcon">
-          <i class="fa fa-calendar-alt"></i>
+          <i class="fa fa-calendar-alt" style="color: blue;"></i>
           <span>Gérer les appels</span>
         </a>
         <div id="collapseBootstrapcon" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
@@ -64,7 +64,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePage" aria-expanded="true"
           aria-controls="collapsePage">
-          <i class="fas fa-wallet"></i>
+          <i class="fas fa-wallet"  style="color: blue;"></i>
           <span>Heures supplémentaires</span>
         </a>
         <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
@@ -86,7 +86,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable" aria-expanded="true"
           aria-controls="collapseTable">
-          <i class="fab fa-fw fa-wpforms"></i>
+          <i class="fab fa-fw fa-wpforms" style="color: blue;"></i>
           <span> Imprimer les rapport</span>
         </a>
         <div id="collapseTable" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">

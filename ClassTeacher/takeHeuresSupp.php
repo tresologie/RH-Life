@@ -198,13 +198,11 @@ if($rowVerif && $rowVerif['heures'] > 0 && in_array($adNo, $check)){
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
+                        <th>Nom & Prenom</th>
                         <th>Badge</th>
                         <th>Poste</th>
-                        <th>Usine</th>
-                        <th>De</th>
-                        <th>à</th>
+                        <th>Debut</th>
+                        <th>Fin</th>
                         <th>Heures</th>
                         <th>Cocher</th>
                       </tr>
@@ -230,11 +228,9 @@ if($rowVerif && $rowVerif['heures'] > 0 && in_array($adNo, $check)){
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                <td>".$rows['firstName']."</td>
-                                <td>".$rows['lastName']."</td>
+                                <td>".$rows['firstName']."  ".$rows['lastName']."</td>
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
-                                <td>".$rows['className']."</td>
                                 <td><input class='heureDebut' name='heureDebut[]' type='time' value='01:00' style='width:80px;'></td>
                                 <td><input class='heureFin'   name='heureFin[]'   type='time' value='08:00' style='width:80px;'></td>
                                 <td><input class='duree'      name='heures[]'     type='number' value='7' style='width:60px;'></td>

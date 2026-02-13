@@ -13,13 +13,13 @@ $rs = $conn->query($query);
 $num = $rs->num_rows;
 $rrw = $rs->fetch_assoc();
 ?>
-<h2 style="margin-left:30px;  text-decoration: underline">Liste de tous les employes de <b><?php echo $rrw['className'];?></b></h2>
+<h2 style="margin-left:10px;  text-decoration: underline">
+Liste de tous les employes de <b><?php echo $rrw['className'];?></b></h2>
         <table border="1">
         <thead>
             <tr>
             <th>#</th>
-            <th>Nom</th>
-            <th>Prenom</th>
+            <th>Nom & Prenom</th>
             <th>Identite</th>
             <th>Badge</th>
             <th>Poste</th>
@@ -28,8 +28,9 @@ $rrw = $rs->fetch_assoc();
         </thead>
 
 <?php 
-$filename="Liste de tous les employes de l'usine";
+$filename="Tous les employes de ";
 $dateCreated = date("Y-m-d");
+$todaysDate = date("d-m-Y");
 
 $cnt=1;			
 $ret = mysqli_query($conn,"SELECT tblstudents.Id,tblstudents.dateCreated,
@@ -45,16 +46,15 @@ if(mysqli_num_rows($ret) > 0 )
 echo '  
 <tr>  
 <td>'.$cnt.'</td> 
-<td>'.$firstName= $row['firstName'].'</td> 
-<td>'.$lastName= $row['lastName'].'</td> 
-<td>'.$identite= $row['identite'].'</td> 
-<td>'.$admissionNumber= $row['admissionNumber'].'</td> 
-<td>'.$poste=$row['poste'].'</td>		 
-<td>'.$dateCreated=$row['dateCreated'].'</td>	 					
+<td>'.$row['firstName'].'  '.$row['lastName'].'</td> 
+<td>'.$row['identite'].'</td> 
+<td>'.$row['admissionNumber'].'</td> 
+<td>'.$row['poste'].'</td>		 
+<td>'.$row['dateCreated'].'</td>	 					
 </tr>  
 ';
 header("Content-type: application/vnd.ms-excel");
-header("Content-Disposition: attachment; filename=".$filename.".xls");
+header("Content-Disposition: attachment; filename=".$filename." .xls");
 header("Pragma: no-cache");
 header("Expires: 0");
 			$cnt++;

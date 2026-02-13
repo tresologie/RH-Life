@@ -96,12 +96,9 @@ $query = "SELECT tblclass.className
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>No. d'identité</th>
+                        <th>Nom & Prénom</th>
                         <th>Badge</th>
                         <th>Poste</th>
-                        <th>Salaire</th>
                         <th>Usine</th>
                         <th>Date</th>
                         
@@ -112,7 +109,7 @@ $query = "SELECT tblclass.className
 
                   <?php
                       $query = "SELECT tblstudents.Id,tblclass.className,tblstudents.firstName,tblstudents.identite,
-                      tblstudents.lastName,tblstudents.admissionNumber,poste,salaire,tblstudents.dateCreated
+                      tblstudents.lastName,tblstudents.admissionNumber,poste,tblstudents.dateCreated
                       FROM tblstudents
                       INNER JOIN tblclass ON tblclass.Id = tblstudents.classId ";
                       $rs = $conn->query($query);
@@ -127,12 +124,9 @@ $query = "SELECT tblclass.className
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                <td>".$rows['firstName']."</td>
-                                <td>".$rows['lastName']."</td>
-                                <td>".$rows['identite']."</td>
+                                <td>".$rows['firstName']." ".$rows['lastName']." </br> ".$rows['identite']."</td>
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
-                                <td>".$rows['salaire']."</td>
                                 <td>".$rows['className']."</td>
                                 <td>".$rows['dateCreated']."</td>
                                

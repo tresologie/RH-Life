@@ -4,7 +4,14 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+$query = "SELECT tblclass.className
+FROM tblclassteacher
+INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
+Where tblclassteacher.Id = '$_SESSION[userId]'";
 
+$rs = $conn->query($query);
+$num = $rs->num_rows;
+$rrw = $rs->fetch_assoc();
 
 ?>
 
@@ -38,7 +45,7 @@ include '../Includes/session.php';
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Liste des heures supplementaires</h1>
+            <h1 class="h3 mb-0 text-gray-800">Liste des heures supplementaires (<?php echo $rrw['className'];?>)</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Voir la liste des supp</li>
@@ -58,7 +65,7 @@ include '../Includes/session.php';
                     <div class="form-group row mb-3">
                         <div class="col-xl-6">
                         <label class="form-control-label">Selectionner la date<span class="text-danger ml-2">*</span></label>
-                            <input type="date" class="form-control" name="dateTaken" id="exampleInputFirstName" placeholder="Class Arm Name">
+                            <input type="date" class="form-control" name="dateTaken" id="exampleInputFirstName">
                         </div>
                         
                     </div>
@@ -72,20 +79,18 @@ include '../Includes/session.php';
               <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Heures supplementaires</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Heures supplementaires </h6>
                 </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>
                       <th>#</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
+                        <th>Nom & Prénom</th>
                         <th>Badge</th>
                         <th>Poste</th>
-                        <th>Usine</th>
-                        <th>De</th>
-                        <th>à</th>
+                        <th>Debut</th>
+                        <th>Fin</th>
                         <th>Heures</th>
                         <th>Montant</th>
                         <th>Date</th>
@@ -100,10 +105,10 @@ include '../Includes/session.php';
 
                       $dateTaken =  $_POST['dateTaken'];
 
-                      $query = "SELECT tblsupp.Id,tblsupp.dateTimeTaken,
+                      $query = "SELECT tblsupp.Id,tblsupp.dateTimeTaken,tblstudents.identite,
                       DATE_FORMAT(tblsupp.heureDebut, '%H:%i') AS heureDebut, 
                       DATE_FORMAT(tblsupp.heureFin, '%H:%i') AS heureFin,
-                      tblsupp.heures,tblclass.className, FLOOR(tblsupp.montant / 100) * 100 AS montant,        
+                      tblsupp.heures, FLOOR(tblsupp.montant / 100) * 100 AS montant,        
                       tblstudents.firstName,tblstudents.lastName,tblstudents.admissionNumber,tblstudents.poste
                       FROM tblsupp
                       INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
@@ -121,15 +126,13 @@ include '../Includes/session.php';
                             echo"
                               <tr>
                               <td>".$sn."</td>
-                              <td>".$rows['firstName']."</td>
-                              <td>".$rows['lastName']."</td>
+                              <td>".$rows['firstName']." ".$rows['lastName']."</td>
                               <td>".$rows['admissionNumber']."</td>
                               <td>".$rows['poste']."</td>
-                              <td>".$rows['className']."</td>
                               <td>".$rows['heureDebut']."</td>
                               <td>".$rows['heureFin']."</td>
                               <td>".$rows['heures']."</td>
-                              <td>".$rows['montant']."</td>
+                              <td>".number_format($rows['montant'], 0, ',', ' ')."</td>
                              <td>".$rows['dateTimeTaken']."</td>
                               </tr>";
                           }

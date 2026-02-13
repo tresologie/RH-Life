@@ -173,13 +173,9 @@ if(isset($_POST['save'])){
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                 
+                        <th>Nom & Prenom</th>
                         <th>Badge</th>
                         <th>Poste</th>
-                        <th>Usine</th>
-                       
                         <th>Cocher</th>
                       </tr>
                     </thead>
@@ -205,12 +201,9 @@ if(isset($_POST['save'])){
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                <td>".$rows['firstName']."</td>
-                                <td>".$rows['lastName']."</td>
-                               
+                                <td>".$rows['firstName'].'  '.$rows['lastName']."</td> 
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
-                                <td>".$rows['className']."</td>
                               
                                 <td><input name='check[]' type='checkbox' value=".$rows['admissionNumber']." class='form-control'></td>
                               </tr>";

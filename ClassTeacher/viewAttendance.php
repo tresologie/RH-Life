@@ -5,7 +5,14 @@ include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
 
+$query = "SELECT tblclass.className
+FROM tblclassteacher
+INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
 
+Where tblclassteacher.Id = '$_SESSION[userId]'";
+$rs = $conn->query($query);
+$num = $rs->num_rows;
+$rrw = $rs->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +45,7 @@ include '../Includes/session.php';
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Voir la liste d'appel</h1>
+            <h1 class="h3 mb-0 text-gray-800">Liste d'appel (<?php echo $rrw['className'];?>)</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Voir la liste d'appel</li>
@@ -72,19 +79,16 @@ include '../Includes/session.php';
               <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Appel des employés</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Appel des employés de (<?php echo $rrw['className'];?>)</h6>
                 </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>No. d'identité</th>
+                        <th>Nom & Prenom</th>
                         <th>Badge</th>
                         <th>Poste</th>
-                        <th>Usine</th>
                         <th>Date</th>
                         <th>Status</th>
                       </tr>
@@ -98,7 +102,7 @@ include '../Includes/session.php';
 
                       $dateTaken =  $_POST['dateTaken'];
 
-                      $query = "SELECT tblattendance.Id,tblattendance.status,tblstudents.identite, tblattendance.dateTimeTaken,tblclass.className,           
+                      $query = "SELECT tblattendance.Id,tblattendance.status, tblattendance.dateTimeTaken,tblclass.className,           
                       tblstudents.firstName,tblstudents.lastName,tblstudents.admissionNumber,tblstudents.poste
                       FROM tblattendance
                       INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
@@ -118,12 +122,9 @@ include '../Includes/session.php';
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                 <td>".$rows['firstName']."</td>
-                                <td>".$rows['lastName']."</td>
-                                <td>".$rows['identite']."</td>
+                                <td>".$rows['firstName'].'  '.$rows['lastName']."</td> 
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
-                                <td>".$rows['className']."</td>
                                 <td>".$rows['dateTimeTaken']."</td>
                                 <td style='background-color:".$colour."'>".$status."</td>
                                 

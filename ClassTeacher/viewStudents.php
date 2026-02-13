@@ -72,7 +72,7 @@ $query = "SELECT tblclass.className
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Tous les employés de l'usine <b><?php echo $rrw['className'];?></b></h1>
+            <h1 class="h3 mb-0 text-gray-800">Tous les employés de <b><?php echo $rrw['className'];?></b></h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Tous les employés de l'usine</li>
@@ -96,9 +96,7 @@ $query = "SELECT tblclass.className
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>No. d'identité</th>
+                        <th>Nom & Prénom</th>
                         <th>Badge</th>
                         <th>Poste</th>
                        
@@ -127,9 +125,7 @@ $query = "SELECT tblclass.className
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                <td>".$rows['firstName']."</td>
-                                <td>".$rows['lastName']."</td>
-                                <td>".$rows['identite']."</td>
+                                <td>".$rows['firstName']." ".$rows['lastName']." </td>
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
                                

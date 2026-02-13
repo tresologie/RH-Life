@@ -128,9 +128,7 @@ include '../Includes/session.php';
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>No. d'identité</th>
+                        <th>Nom & Prenom</th>
                         <th>Badge</th>
                         <th>Poste</th>
                         <th>Date</th>
@@ -180,7 +178,7 @@ include '../Includes/session.php';
                          $toDate =  $_POST['toDate'];
 
                          $query = "SELECT tblattendance.Id,tblattendance.status,tblattendance.dateTimeTaken,
-                        tblstudents.firstName,tblstudents.lastName,tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste
+                        tblstudents.firstName,tblstudents.lastName,tblstudents.admissionNumber,tblstudents.poste
                         FROM tblattendance
                         INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
                         
@@ -204,9 +202,7 @@ include '../Includes/session.php';
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                 <td>".$rows['firstName']."</td>
-                                <td>".$rows['lastName']."</td>
-                                <td>".$rows['identite']."</td>
+                                <td>".$rows['firstName'].'  '.$rows['lastName']."</td>
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
                                 <td>".$rows['dateTimeTaken']."</td>

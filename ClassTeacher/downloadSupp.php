@@ -10,10 +10,24 @@ header("Expires: 0");
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+
+
+$query = "SELECT tblclass.className
+FROM tblclassteacher
+INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
+Where tblclassteacher.Id = '$_SESSION[userId]'";
+
+$rs = $conn->query($query);
+$num = $rs->num_rows;
+$rrw = $rs->fetch_assoc();
+
+
+
 // Date du jour
 $todaysDate = date("d-m-Y");
-echo "<h2 style='margin-left:30px; text-decoration: underline'>
-Liste des heures supplementaires du ".$todaysDate."
+echo "
+<h2 style='margin-left:30px; text-decoration: underline'>
+Liste des heures supplementaires du ".$todaysDate." (".$rrw['className'].")
 </h2>";
 
 // Tableau
@@ -21,13 +35,12 @@ echo "<table border='1'>
 <thead>
 <tr>
 <th>#</th>
-<th>Nom</th>
-<th>Prenom</th>
+<th>Nom & Prenom</th>
 <th>Badge</th>
 <th>Poste</th>
 <th>Usine</th>
-<th>De</th>
-<th>A</th>
+<th>Debut</th>
+<th>Fin</th>
 <th>Heures</th>
 <th>Montant</th>
 <th>Signature</th>
@@ -58,8 +71,7 @@ if(mysqli_num_rows($ret) > 0 )
     { 
         echo "<tr>
         <td>".$cnt."</td>
-        <td>".$row['firstName']."</td>
-        <td>".$row['lastName']."</td>
+        <td>".$row['firstName']."  ".$row['lastName']."</td>
         <td>".$row['admissionNumber']."</td>
         <td>".$row['poste']."</td>
         <td>".$row['className']."</td>
@@ -78,12 +90,20 @@ if(mysqli_num_rows($ret) > 0 )
     }
 
     // Afficher la ligne total
-    echo "<tr style='font-weight:bold; background-color:#f2f2f2;'>
-        <td colspan='9' style='text-align:right;'>Total</td>
-        <td>".number_format($totalMontant, 0, ',', ' ')."</td>
+    echo "
+    <tr style='font-weight:bold;'>
+        <td colspan='8'>Total</td>
+        <td>".number_format($totalMontant, 0, ',', ' '). "Fbu</td>
+        <td></td>
     </tr>";
 }
 
 echo "</table>";
+echo "<table>
+<tr style='font-weight:bold;'>
+<td colspan='5'style='text-align:left;'>Chef d'usine </td>
+<td colspan='5' style='text-align:right;'>Approuvee par l'assistant du Directeur General </td>
+</tr>
+</table>";
 
 ?>

@@ -258,9 +258,7 @@ if(isset($_POST['save'])){
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>No. d'identité</th>
+                        <th>Nom & Prenom</th>
                         <th>Badge</th>
                         <th>Poste</th>
                         <th>Salaire</th>
@@ -292,9 +290,8 @@ if(isset($_POST['save'])){
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                <td>".$rows['firstName']."</td>
-                                <td>".$rows['lastName']."</td>
-                                <td>".$rows['identite']."</td>
+                                <td>".$rows['firstName'].'  '.$rows['lastName']. '</br>'
+                                .$rows['identite']."</td>
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
                                 <td>".$rows['salaire']."</td>

@@ -1,7 +1,15 @@
-<?php 
-error_reporting(0);
+<?php
+// Rien avant ça ! Pas d'espace ni echo
+header("Content-type: application/vnd.ms-excel");
+$filename = "Rapport_Heures";
+$todaysDate = date("d-m-Y");
+header("Content-Disposition: attachment; filename=".$filename." du ".$todaysDate.".xls");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
+
 
 
 $query = "SELECT tblclass.className
@@ -12,10 +20,30 @@ Where tblclassteacher.Id = '$_SESSION[userId]'";
 $rs = $conn->query($query);
 $num = $rs->num_rows;
 $rrw = $rs->fetch_assoc();
-?>
-<h2 style="margin-left:10px;  text-decoration: underline">
-Liste de tous les employes de <b><?php echo $rrw['className'];?></b></h2>
-        <table border="1">
+
+
+
+// Date du jour
+$todaysDate = date("d-m-Y");
+
+echo "
+<table>
+<tr style='font-weight:bold;'>
+    <td colspan='3' style='text-align:left;'> Life Campony </td>
+    <td colspan='3' style='text-align:right;'>Le ".$todaysDate."</td>
+</tr>
+<tr style='font-weight:bold;'>
+    <td colspan='3' style='text-align:left;'> Usine: ".$rrw['className']." </td>
+</tr>
+<tr style='font-weight:bold;'>
+    <td></td>
+    <td colspan='5' style='text-decoration:underline; text-align:center;'>
+     <h2>Liste des employes de l'usine </h2></td>
+</tr>
+
+</table>";
+echo"
+        <table border='1'>
         <thead>
             <tr>
             <th>#</th>
@@ -25,9 +53,8 @@ Liste de tous les employes de <b><?php echo $rrw['className'];?></b></h2>
             <th>Poste</th>
             <th>Date</th>
             </tr>
-        </thead>
+        </thead>";
 
-<?php 
 $filename="Tous les employes de ";
 $dateCreated = date("Y-m-d");
 $todaysDate = date("d-m-Y");

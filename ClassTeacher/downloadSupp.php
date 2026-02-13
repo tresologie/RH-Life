@@ -25,10 +25,23 @@ $rrw = $rs->fetch_assoc();
 
 // Date du jour
 $todaysDate = date("d-m-Y");
+
 echo "
-<h2 style='margin-left:30px; text-decoration: underline'>
-Liste des heures supplementaires du ".$todaysDate." (".$rrw['className'].")
-</h2>";
+<table>
+<tr style='font-weight:bold;'>
+    <td colspan='6' style='text-align:left;'> Life Campony </td>
+    <td colspan='4' style='text-align:right;'>Le ".$todaysDate."</td>
+</tr>
+<tr style='font-weight:bold;'>
+    <td colspan='6' style='text-align:left;'> Usine: ".$rrw['className']." </td>
+</tr>
+<tr style='font-weight:bold;'>
+    <td></td>
+    <td colspan='9' style='text-decoration:underline; text-align:center;'>
+     <h2>Liste des heures supplementaires </h2></td>
+</tr>
+
+</table>";
 
 // Tableau
 echo "<table border='1'>
@@ -36,9 +49,9 @@ echo "<table border='1'>
 <tr>
 <th>#</th>
 <th>Nom & Prenom</th>
+<th>No. d'identite</th>
 <th>Badge</th>
 <th>Poste</th>
-<th>Usine</th>
 <th>Debut</th>
 <th>Fin</th>
 <th>Heures</th>
@@ -54,7 +67,7 @@ $cnt = 1;
 $totalHeures = 0;
 $totalMontant = 0;
 
-$ret = mysqli_query($conn,"SELECT tblsupp.Id, tblsupp.dateTimeTaken,
+$ret = mysqli_query($conn,"SELECT tblsupp.Id, tblsupp.dateTimeTaken, tblstudents.identite,
 DATE_FORMAT(tblsupp.heureDebut, '%H:%i') AS heureDebut, 
 DATE_FORMAT(tblsupp.heureFin, '%H:%i') AS heureFin,
 tblsupp.heures, tblclass.className, FLOOR(tblsupp.montant / 100) * 100 AS montant,        
@@ -72,9 +85,9 @@ if(mysqli_num_rows($ret) > 0 )
         echo "<tr>
         <td>".$cnt."</td>
         <td>".$row['firstName']."  ".$row['lastName']."</td>
+        <td>".$row['identite']."</td>
         <td>".$row['admissionNumber']."</td>
         <td>".$row['poste']."</td>
-        <td>".$row['className']."</td>
         <td>".$row['heureDebut']."</td>
         <td>".$row['heureFin']."</td>
         <td>".$row['heures']."</td>
@@ -97,13 +110,26 @@ if(mysqli_num_rows($ret) > 0 )
         <td></td>
     </tr>";
 }
+// Récupérer le nom et prénom du class teacher correspondant au session_classId
+$teacherQuery = mysqli_query($conn, "
+    SELECT firstName, lastName 
+    FROM tblclassteacher 
+    WHERE classId = '".$_SESSION['classId']."'
+");
+$teacher = mysqli_fetch_assoc($teacherQuery);
 
-echo "</table>";
-echo "<table>
-<tr style='font-weight:bold;'>
-<td colspan='5'style='text-align:left;'>Chef d'usine </td>
-<td colspan='5' style='text-align:right;'>Approuvee par l'assistant du Directeur General </td>
-</tr>
-</table>";
+// Ajouter une ligne sous le tableau avec le nom et prénom
+if ($teacher) {
+    echo "
+    <table>
+    <tr style='font-weight:bold;'>
+        <td colspan='4' style='text-align:left;'>
+            Chef d'usine : ".$teacher['firstName']." ".$teacher['lastName']."
+        </td>
+        <td colspan='6' style='text-align:right;'>Approuvee par l'assistant du Directeur General </td>
+    </tr>
+    </table>";
+}
+
 
 ?>

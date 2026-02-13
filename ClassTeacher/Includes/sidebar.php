@@ -78,26 +78,27 @@
         </div>
       </li>
    
-     <!-- <hr class="sidebar-divider">
+      <hr class="sidebar-divider">
       <div class="sidebar-heading">
-      Rapport
+      Rendement
       </div>
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable" aria-expanded="true"
           aria-controls="collapseTable">
           <i class="fab fa-fw fa-wpforms" style="color: blue;"></i>
-          <span> Imprimer les rapport</span>
+          <span> Rapport des rendements</span>
         </a>
         <div id="collapseTable" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Rapport</h6>
             
-            <a class="collapse-item" href="downloadRecord.php"#>Rapport hebdomadaire (Excel)</a>
-            <a class="collapse-item" href="downloadRecord.php"#>Rapport mensuel (Excel)</a>
+            <a class="collapse-item" href="#">Donner le rapport</a>
+            <a class="collapse-item" href="#">Voir le rendement</a>
+            <a class="collapse-item" href="#">Rendement(Excel)</a>
           </div>
         </div>
-      </li> -->
+      </li>
 
      
 

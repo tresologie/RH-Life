@@ -65,7 +65,7 @@ include '../Includes/session.php';
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Tous les Employés de <?php echo $rrw['className'];?></div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">Tous les Employés</div>
                       <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $students;?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
                         <!-- <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 20.4%</span>
@@ -99,7 +99,7 @@ include '../Includes/session.php';
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-calendar fa-2x text-info" ></i>
+                      <i class="fas fa-calendar-check fa-2x text-success" ></i>
                     </div>
                   </div>
                 </div>
@@ -124,7 +124,7 @@ include '../Includes/session.php';
                       </div>
                     </div>
                     <div class="col-auto">
-                    <i class="fas fa-calendar fa-2x text-secondary"></i>
+                    <i class="fas fa-user-times fa-2x text-secondary"></i>
                     </div>
                   </div>
                 </div>
@@ -218,7 +218,7 @@ include '../Includes/session.php';
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-money-bill-wave fa-2x text-info"></i>
+                      <i class="fas fa-money-bill-wave fa-2x text-success"></i>
                     </div>
                   </div>
                 </div>

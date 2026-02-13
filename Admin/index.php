@@ -210,7 +210,7 @@ $absent = $students-$totAttendance;
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-money-bill-wave fa-2x text-info"></i>
+                      <i class="fas fa-money-bill-wave fa-2x text-success"></i>
                     </div>
                   </div>
                 </div>

@@ -176,7 +176,7 @@ if(isset($_POST['save'])){
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
+                        <th>Usine</th>
                         <th>Editer</th>
                         <th>Supprimer</th>
                       </tr>
@@ -198,8 +198,8 @@ if(isset($_POST['save'])){
                               <tr>
                                 <td>".$sn."</td>
                                 <td>".$rows['className']."</td>
-                                <td><a href='?action=edit&Id=".$rows['Id']."'><i class='fas fa-fw fa-edit'></i>Edit</a></td>
-                                <td><a href='?action=delete&Id=".$rows['Id']."'><i class='fas fa-fw fa-trash'></i>Delete</a></td>
+                                <td><a href='?action=edit&Id=".$rows['Id']."'><i class='fas fa-fw fa-edit'></i></a></td>
+                                <td><a href='?action=delete&Id=".$rows['Id']."'><i class='fas fa-fw fa-trash'></i></a></td>
                               </tr>";
                           }
                       }

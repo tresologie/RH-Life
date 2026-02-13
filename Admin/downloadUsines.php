@@ -12,14 +12,27 @@ Where tblclassteacher.Id = '$_SESSION[userId]'";
 $rs = $conn->query($query);
 $num = $rs->num_rows;
 $rrw = $rs->fetch_assoc();
+$todaysDate = date("d-m-Y");
+
+echo "
+<table>
+<tr style='font-weight:bold;'>
+    <td colspan='3' style='text-align:left;'> Life Campony </td>
+    <td colspan='3' style='text-align:right;'>Le ".$todaysDate."</td>
+</tr>
+<tr style='font-weight:bold;'>
+    <td></td>
+    <td colspan='5' style='text-decoration:underline;'>
+     <h2>Liste de tous les usines et chefs de Life campony </h2></td>
+</tr>
+
+</table>";
 ?>
-<h2 style="margin-left:30px;  text-decoration: underline">Liste de tous les usines et chefs de Life campony </h2>
         <table border="1">
         <thead>
             <tr>
             <th>#</th>
-            <th>Nom</th>
-            <th>Prenom</th>
+            <th>Nom & Prenom</th>
             <th>Email</th>
             <th>Tel</th>
             <th>Usine</th>
@@ -44,12 +57,11 @@ if(mysqli_num_rows($ret) > 0 )
 echo '  
 <tr>  
 <td>'.$cnt.'</td> 
-<td>'.$firstName= $row['firstName'].'</td> 
-<td>'.$lastName= $row['lastName'].'</td> 
-<td>'.$emailAddress= $row['emailAddress'].'</td> 
-<td>'.$phoneNo= $row['phoneNo'].'</td>
-<td>'.$className= $row['className'].'</td>  
-<td>'.$dateCreated=$row['dateCreated'].'</td>	 					
+<td>'.$row['firstName'].'  '.$row['lastName'].'</td>  
+<td>'.$row['emailAddress'].'</td> 
+<td>'.$row['phoneNo'].'</td>
+<td>'.$row['className'].'</td>  
+<td>'.$row['dateCreated'].'</td>	 					
 </tr>  
 ';
 header("Content-type: application/octet-stream");

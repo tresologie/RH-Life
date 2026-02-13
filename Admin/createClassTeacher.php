@@ -252,12 +252,11 @@ if(isset($_POST['save'])){
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
+                        <th>Nom & Prenom</th>
                         <th>Email</th>
                         <th>Tel</th>
                         <th>Usine</th>
-                        
+                        <th>Editer</th>
                         <th>Supprimer</th>
                       </tr>
                     </thead>
@@ -281,13 +280,12 @@ if(isset($_POST['save'])){
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                <td>".$rows['firstName']."</td>
-                                <td>".$rows['lastName']."</td>
+                                <td>".$rows['firstName'].'  '.$rows['lastName']."</td>
                                 <td>".$rows['emailAddress']."</td>
                                 <td>".$rows['phoneNo']."</td>
                                 <td>".$rows['className']."</td>
-                                 
-                                <td><a href='?action=delete&Id=".$rows['Id']."&classArmId=".$rows['classArmId']."'><i class='fas fa-fw fa-trash'></i></a></td>
+                                <td><a href='?action=edit&Id=".$rows['Id']."'><i class='fas fa-fw fa-edit'></i></a></td>
+                                <td><a href='?action=delete&Id=".$rows['Id']." ']'><i class='fas fa-fw fa-trash'></i></a></td>
                               </tr>";
                           }
                       }

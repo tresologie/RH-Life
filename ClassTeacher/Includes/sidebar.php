@@ -47,7 +47,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Gérer les appels</h6>
             <a class="collapse-item" href="takeAttendance.php">Faire l'appel</a>
-            <a class="collapse-item" href="refaireAppel">Refaire l'appel</a>
+            <a class="collapse-item" href="refaireAppel.php">Refaire l'appel</a>
             <a class="collapse-item" href="viewAttendance.php">Voir la liste d'appel</a>
             <a class="collapse-item" href="viewStudentAttendance.php">Voir l'appel d'un employé</a>
             <a class="collapse-item" href="downloadRecord.php">Rapport de l'appel(Excel)</a>

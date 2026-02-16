@@ -25,8 +25,8 @@ $queryClasses = mysqli_query($conn, "SELECT DISTINCT classId FROM tblstudents OR
   <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
       <?php include "Includes/topbar.php";?>
-      <div class="container-fluid" id="container-wrapper">
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <div class="container-fluid" id="container-wrapper"style="max-height:500px; overflow-y:auto; ">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4" >
           <h1 class="h3 mb-0 text-gray-800">Statistiques de présences du <?php echo date("d-m-Y");?></h1>
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="./">Accueil</a></li>
@@ -64,7 +64,7 @@ $queryClasses = mysqli_query($conn, "SELECT DISTINCT classId FROM tblstudents OR
         ?>
 
         <!-- Ligne pour cette classe -->
-        <div class="row mb-4">
+        <div class="row mb-4" >
           <!-- Total employés -->
           <div class="col-xl-3 col-md-6 mb-4">
             <div class="card h-100">

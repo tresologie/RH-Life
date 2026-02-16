@@ -32,30 +32,6 @@ $query = "SELECT tblclass.className
   <link href="css/ruang-admin.min.css" rel="stylesheet">
 
 
-
-   <script>
-    function classArmDropdown(str) {
-    if (str == "") {
-        document.getElementById("txtHint").innerHTML = "";
-        return;
-    } else { 
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("txtHint").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET","ajaxClassArms2.php?cid="+str,true);
-        xmlhttp.send();
-    }
-}
-</script>
 </head>
 
 <body id="page-top">
@@ -91,7 +67,7 @@ $query = "SELECT tblclass.className
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Tous les employés</h6>
                 </div>
-                <div class="table-responsive p-3">
+                <div class="table-responsive p-3" style="max-height:500px; overflow-y:auto;">
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>

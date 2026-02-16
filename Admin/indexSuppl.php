@@ -34,7 +34,7 @@ $queryClasses = mysqli_query($conn, "SELECT DISTINCT classId FROM tblstudents OR
           </ol>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-3" style="max-height:500px; overflow-y:auto; ">
           <?php
           while ($class = mysqli_fetch_assoc($queryClasses)) {
               $classId = $class['classId'];
@@ -68,7 +68,7 @@ $queryClasses = mysqli_query($conn, "SELECT DISTINCT classId FROM tblstudents OR
           ?>
 
           <!-- Card Montant prévu -->
-          <div class="col-xl-3 col-md-6 mb-4">
+          <div class="col-xl-3 col-md-6 mb-4" >
             <div class="card h-100">
               <div class="card-body">
                 <div class="row no-gutters align-items-center">

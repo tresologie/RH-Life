@@ -80,7 +80,7 @@ include '../Includes/session.php';
                 </div>
                 <div class="card-body">
                   <form method="post">
-                    <div class="form-group row mb-3">
+                    <div class="form-group row mb-3" style="max-height:500px; overflow-y:auto; ">
                         <div class="col-xl-6">
                         <label class="form-control-label">Selectionner un employé<span class="text-danger ml-2">*</span></label>
                         <?php

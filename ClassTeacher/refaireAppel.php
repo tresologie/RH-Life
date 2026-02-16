@@ -106,29 +106,6 @@ if(isset($_POST['save'])){
 
 
 
-   <script>
-    function classArmDropdown(str) {
-    if (str == "") {
-        document.getElementById("txtHint").innerHTML = "";
-        return;
-    } else { 
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("txtHint").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET","ajaxClassArms2.php?cid="+str,true);
-        xmlhttp.send();
-    }
-}
-</script>
 </head>
 
 <body id="page-top">
@@ -166,7 +143,7 @@ if(isset($_POST['save'])){
                   <h6 class="m-0 font-weight-bold text-primary">Tous les employés de (<?php echo $rrw['className'];?>)</h6>
                   <h6 class="m-0 font-weight-bold text-danger">Note: <i>Cochez dans la case pour marquer la présence!</i></h6>
                 </div>
-                <div class="table-responsive p-3">
+                <div class="table-responsive p-3" style="max-height:500px; overflow-y:auto; ">
                 <?php echo $statusMsg; ?>
                   <table class="table align-items-center table-flush table-hover">
                     <thead class="thead-light">
@@ -174,11 +151,9 @@ if(isset($_POST['save'])){
                         <th>#</th>
                         <th>Nom</th>
                         <th>Prénom</th>
-                 
                         <th>Badge</th>
                         <th>Poste</th>
                         <th>Usine</th>
-                       
                         <th>Cocher</th>
                       </tr>
                     </thead>
@@ -206,7 +181,6 @@ if(isset($_POST['save'])){
                                 <td>".$sn."</td>
                                 <td>".$rows['firstName']."</td>
                                 <td>".$rows['lastName']."</td>
-                               
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
                                 <td>".$rows['className']."</td>

@@ -15,7 +15,7 @@ if(isset($_POST['save'])){
 
     if($ret > 0){ 
 
-        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>This Class Already Exists!</div>";
+        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>Cette usine existe déjà!</div>";
     }
     else{
 

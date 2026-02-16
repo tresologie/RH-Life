@@ -57,6 +57,7 @@ $queryClasses = mysqli_query($conn, "SELECT DISTINCT classId FROM tblstudents OR
                                                   WHERE classId = '$classId' AND DATE(dateTimeTaken) = CURDATE()");
               $rowPayer = mysqli_fetch_assoc($resultPayer);
               $payer = $rowPayer['total_payer'];
+              $payer = floor($payer / 100) * 100;
 
               // À retourner
               $retour = $total - $payer;

@@ -7,41 +7,48 @@ include '../Includes/session.php';
 //------------------------SAVE--------------------------------------------------
 
 if(isset($_POST['save'])){
-    
-    $firstName=$_POST['firstName'];
-  $lastName=$_POST['lastName'];
-  $identite=$_POST['identite'];
-  $admissionNumber=$_POST['admissionNumber'];
-  $poste=$_POST['poste'];
-  $salaire=$_POST['salaire'];
-  $classId=$_POST['classId'];
-  $dateCreated = date("Y-m-d");
-   
-    $query=mysqli_query($conn,"select * from tblstudents where admissionNumber ='$admissionNumber' or identite = '$identite' ");
-    $ret=mysqli_fetch_array($query);
 
-    if($ret > 0){ 
+    $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
+    $lastName = mysqli_real_escape_string($conn, $_POST['lastName']);
+    $identite = mysqli_real_escape_string($conn, $_POST['identite']);
+    $admissionNumber = mysqli_real_escape_string($conn, $_POST['admissionNumber']);
+    $poste = mysqli_real_escape_string($conn, $_POST['poste']);
+    $salaire = mysqli_real_escape_string($conn, $_POST['salaire']);
+    $classId = mysqli_real_escape_string($conn, $_POST['classId']);
+    $dateCreated = date("Y-m-d");
 
-        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>L'employé existe déjà!</div>";
+    // Vérifier si badge OU identite existe déjà
+    $check = mysqli_query($conn, "SELECT Id FROM tblstudents 
+                                  WHERE admissionNumber='$admissionNumber' 
+                                  OR identite='$identite'");
+
+    if(mysqli_num_rows($check) > 0){
+
+        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>
+                        L'employé existe déjà !
+                      </div>";
     }
     else{
 
-    $query=mysqli_query($conn,"insert into tblstudents(firstName,lastName,identite,admissionNumber,poste,salaire,password,classId,dateCreated) 
-    value('$firstName','$lastName','$identite','$admissionNumber','$poste','$salaire','12345','$classId','$dateCreated')");
+        $insert = mysqli_query($conn, "INSERT INTO tblstudents
+        (firstName,lastName,identite,admissionNumber,poste,salaire,password,classId,dateCreated)
+        VALUES
+        ('$firstName','$lastName','$identite','$admissionNumber','$poste','$salaire','12345','$classId','$dateCreated')");
 
-    if ($query) {
-        
-        $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;'>Employé ajouté avec succes!</div>";
-            
+        if($insert){
+
+            $statusMsg = "<div class='alert alert-success' style='margin-right:700px;'>
+                            Employé ajouté avec succès !
+                          </div>";
+        }
+        else{
+
+            $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>
+                            Erreur lors de l'insertion !
+                          </div>";
+        }
     }
-    else
-    {
-         $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>Erreur!</div>";
-    }
-  }
 }
-
-
 
 //--------------------EDIT------------------------------------------------------------
 
@@ -66,9 +73,9 @@ if(isset($_POST['save'])){
 
              $dateCreated = date("Y-m-d");
 
-           $query=mysqli_query($conn,"update tblstudents set firstName='$firstName', lastName='$lastName',
-    identite='$identite', admissionNumber='$admissionNumber', poste='$poste', salaire='$salaire', classId='$classId'
-    where Id='$Id'");
+           $query=mysqli_query($conn,"UPDATE tblstudents set firstName='$firstName', lastName='$lastName',
+            identite='$identite', admissionNumber='$admissionNumber', poste='$poste', salaire='$salaire', classId='$classId'
+            where Id='$Id'");
             if ($query) { 
                 echo "<script type = \"text/javascript\">
                 window.location = (\"createStudents.php\")
@@ -117,14 +124,13 @@ if(isset($_POST['save'])){
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/logo/life.jpg" rel="icon">
-<?php include 'includes/title.php';?>
+  <?php include 'includes/title.php';?>
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
 
-
-
-   <script>
+  
+  <script>
     function classArmDropdown(str) {
     if (str == "") {
         document.getElementById("txtHint").innerHTML = "";
@@ -147,6 +153,9 @@ if(isset($_POST['save'])){
     }
 }
 </script>
+
+
+
 </head>
 
 <body id="page-top">
@@ -264,9 +273,8 @@ if(isset($_POST['save'])){
                         <th>Salaire</th>
                         <th>Usine</th>
                         <th>Date</th>
-                        
-                         <th>Editer</th>
-                        <th>Supprimer</th>
+                        <th>Editer</th>
+                        <th>Suppr</th>
                       </tr>
                     </thead>
                 
@@ -290,13 +298,11 @@ if(isset($_POST['save'])){
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                <td>".$rows['firstName'].'  '.$rows['lastName']. '</br>'
-                                .$rows['identite']."</td>
+                                <td>".$rows['firstName'].'  '.$rows['lastName']. '</br> '.$rows['identite']."</td>
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
-                                <td>".$rows['salaire']."</td>
+                                <td>".$rows['salaire']." Fbu</td>
                                 <td>".$rows['className']."</td>
-                                
                                  <td>".$rows['dateCreated']."</td>
                                 <td><a href='?action=edit&Id=".$rows['Id']."'><i class='fas fa-fw fa-edit'></i></a></td>
                                 <td><a href='?action=delete&Id=".$rows['Id']."'><i class='fas fa-fw fa-trash'></i></a></td>

@@ -11,10 +11,9 @@ if(isset($_POST['save'])){
     $firstName=$_POST['firstName'];
   $lastName=$_POST['lastName'];
   $emailAddress=$_POST['emailAddress'];
-
   $phoneNo=$_POST['phoneNo'];
   $classId=$_POST['classId'];
-  $dateCreated = date("d-m-y");
+  $dateCreated = date("Y-m-d");
    
     $query=mysqli_query($conn,"select * from tblclassteacher where emailAddress ='$emailAddress'");
     $ret=mysqli_fetch_array($query);
@@ -127,30 +126,6 @@ if(isset($_POST['save'])){
   <link href="css/ruang-admin.min.css" rel="stylesheet">
 
 
-
-   <script>
-    function classArmDropdown(str) {
-    if (str == "") {
-        document.getElementById("txtHint").innerHTML = "";
-        return;
-    } else { 
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("txtHint").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET","ajaxClassArms.php?cid="+str,true);
-        xmlhttp.send();
-    }
-}
-</script>
 </head>
 
 <body id="page-top">

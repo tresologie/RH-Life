@@ -45,7 +45,7 @@ include '../Includes/session.php';
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Statistique du<?php echo $todaysDate = date("d-m-Y");?></h1>
+            <h1 class="h3 mb-0 text-gray-800">Statistique du <?php echo $todaysDate = date("d-m-Y");?></h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Tableau</li>
@@ -169,6 +169,7 @@ $absent = $students-$totAttendance;
      $row = mysqli_fetch_assoc($querySum);
      $total = $row['montant'];
      $total = floor($total / 100) * 100;
+     
 
           ?>
             <div class="col-xl-3 col-md-6 mb-4">
@@ -198,6 +199,7 @@ $absent = $students-$totAttendance;
   
             $row = mysqli_fetch_assoc($result);
             $payer = $row['total_montant'];
+            $payer = floor($payer / 100) * 100;
             ?>
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card h-100">
@@ -221,6 +223,7 @@ $absent = $students-$totAttendance;
              <!-- Std Att Card  -->
              <?php 
            $retour=$total-$payer;
+           
             ?>
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card h-100">

@@ -136,11 +136,11 @@ include '../Includes/session.php';
 
                         $singleDate =  $_POST['singleDate'];
 
-                         $query = "SELECT tblattendance.Id,tblattendance.status,tblattendance.dateTimeTaken,
-                        tblstudents.firstName,tblstudents.lastName,tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste
-                        FROM tblattendance
+                         $query = "SELECT tblattendance.Id,tblattendance.dateTimeTaken,
+                        tblstudents.firstName,tblstudents.lastName,tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste,
+                        tblsupp.heureDebut, tblsupp.heureFin, tblsupp.heures, tblsupp.montant
+                        FROM tblsupp
                         INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
-                       
                         INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
                         where tblattendance.dateTimeTaken = '$singleDate' and tblattendance.admissionNo = '$admissionNumber' 
                         and tblattendance.classId = '$_SESSION[classId]' ";

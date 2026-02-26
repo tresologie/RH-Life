@@ -200,7 +200,8 @@ ORDER BY tblstudents.firstName ASC";
       foreach($dates as $date){
          echo "<th>".date("d/m", strtotime($date))."</th>";
          } 
-         echo "<th>TOTAL</th>"; // colonne Total echo "</tr></thead><tbody>";
+         echo "<th>TOTAL</th>"; // colonne Total 
+         echo "</tr></thead><tbody>";
 
       foreach($data as $emp => $info){
 

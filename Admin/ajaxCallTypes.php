@@ -21,7 +21,7 @@ include '../Includes/dbcon.php';
                         <input type="date" class="form-control" name="fromDate" id="exampleInputFirstName">
                         </div>
                         <div class="col-xl-6">
-                        <label class="form-control-label">à<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Au<span class="text-danger ml-2">*</span></label>
                         <input type="date" class="form-control" name="toDate" id="exampleInputFirstName">
                         </div>
                     </div>';

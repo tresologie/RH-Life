@@ -100,7 +100,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePage" aria-expanded="true"
           aria-controls="collapsePage">
-          <i class="fas fa-money-bill" style="color: blue;"></i>
+          <i class="fas fa-chart-bar" style="color: blue;"></i>
           <span>Présences & Salaires</span>
         </a>
         <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">

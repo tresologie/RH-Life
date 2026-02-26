@@ -118,7 +118,7 @@ $query = "SELECT tblclass.className
                         echo"<div id='txtHint'></div>";
                       ?>
 
-                    <button type="submit" name="view" class="btn btn-primary">Heures suppl</button>
+                    <button type="submit" name="view" class="btn btn-primary">Afficher</button>
                   </form>
                 </div>
               </div>
@@ -264,13 +264,9 @@ $query = "SELECT tblclass.className
   <!-- Page level custom scripts -->
   <script>
 $(document).ready(function () {
-    $('#dataTable').DataTable({
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-        }
-    });
-
-    $('#dataTableHover').DataTable({
+  $('#dataTableHover').DataTable({
+        scrollX: true,
+        autoWidth: false,
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
         }

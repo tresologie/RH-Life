@@ -176,5 +176,18 @@ if(isset($_POST['save'])){
   <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="js/ruang-admin.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script>
+$(document).ready(function () {
+  $('#dataTableHover').DataTable({
+        scrollX: true,
+        autoWidth: false,
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
+        }
+    });
+});
+</script>
 </body>
 </html>

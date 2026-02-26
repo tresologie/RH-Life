@@ -253,7 +253,7 @@ if($rowVerif && $rowVerif['heures'] > 0 && in_array($adNo, $check)){
                     </tbody>
                   </table>
                   <br>
-                  <button type="submit" name="save" class="btn btn-primary">Supplémentaire</button>
+                  <button type="submit" name="save" class="btn btn-primary">Ajouter</button>
                   </form>
                 </div>
               </div>
@@ -287,13 +287,9 @@ if($rowVerif && $rowVerif['heures'] > 0 && in_array($adNo, $check)){
   <!-- Page level custom scripts -->
   <script>
 $(document).ready(function () {
-    $('#dataTable').DataTable({
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-        }
-    });
-
-    $('#dataTableHover').DataTable({
+  $('#dataTableHover').DataTable({
+        scrollX: true,
+        autoWidth: false,
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
         }

@@ -326,17 +326,13 @@ if(isset($_POST['save'])){
   <!-- Page level custom scripts -->
   <script>
 $(document).ready(function () {
-  $('#dataTable').DataTable({
-    language: {
-      url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-    }
-  });
-
   $('#dataTableHover').DataTable({
-    language: {
-      url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-    }
-  });
+        scrollX: true,
+        autoWidth: false,
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
+        }
+    });
 });
 </script>
 

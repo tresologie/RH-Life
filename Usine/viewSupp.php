@@ -69,7 +69,7 @@ $rrw = $rs->fetch_assoc();
                         </div>
                         
                     </div>
-                    <button type="submit" name="view" class="btn btn-primary">Voir les heures supp</button>
+                    <button type="submit" name="view" class="btn btn-primary">Afficher</button>
                   </form>
                 </div>
               </div>
@@ -182,13 +182,9 @@ $rrw = $rs->fetch_assoc();
   <!-- Page level custom scripts -->
   <script>
 $(document).ready(function () {
-    $('#dataTable').DataTable({
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-        }
-    });
-
-    $('#dataTableHover').DataTable({
+  $('#dataTableHover').DataTable({
+        scrollX: true,
+        autoWidth: false,
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
         }

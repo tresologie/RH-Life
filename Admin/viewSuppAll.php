@@ -97,7 +97,7 @@ include '../Includes/session.php';
                         echo"<div id='txtHint'></div>";
                       ?>
 
-                    <button type="submit" name="view" class="btn btn-primary">Heures suppl</button>
+                    <button type="submit" name="view" class="btn btn-primary">Afficher</button>
                   </form>
                 </div>
               </div>
@@ -118,7 +118,7 @@ if(isset($_POST['view'])){
 
   $type = $_POST['type'];
 
-  // 1️⃣ Déterminer la période
+  // Déterminer la période
   if($type == "2"){ // Single date
       $singleDate = $_POST['singleDate'];
       $fromDate = $singleDate;
@@ -139,11 +139,12 @@ if(isset($_POST['view'])){
       $fromDate = date('Y-m-d', strtotime('-6 days')); // 7 jours
   }
 
-  // 2️⃣ Requête SQL
+  // Requête SQL
   $query = "SELECT 
       tblstudents.admissionNumber,
       tblstudents.firstName,
       tblstudents.lastName,
+      tblstudents.identite,
       tblstudents.poste,
       tblclass.className,
       tblsupp.dateTimeTaken,
@@ -156,7 +157,7 @@ if(isset($_POST['view'])){
 
   $rs = $conn->query($query);
 
-  // 3️⃣ Préparer le tableau
+  // Préparer le tableau
   $dates = [];
   $data = [];
 
@@ -170,7 +171,7 @@ if(isset($_POST['view'])){
       $dates[$date] = $date;
 
       // Stocker données par employé
-      $data[$emp]['name'] = $row['firstName'].' '.$row['lastName'];
+      $data[$emp]['name'] = $row['firstName'].' '.$row['lastName'].' '.$row['identite'];
       $data[$emp]['badge'] = $row['admissionNumber'];
       $data[$emp]['usine'] = $row['className'];
       $data[$emp]['poste'] = $row['poste'];
@@ -182,7 +183,7 @@ if(isset($_POST['view'])){
   ksort($dates);
   $dates = array_slice($dates, 0, 7, true);
 
-  // 4️⃣ Affichage du tableau
+  // Affichage du tableau
   if(!empty($data)){
 
       echo "<thead class='thead-light'>";
@@ -204,7 +205,7 @@ if(isset($_POST['view'])){
           $totalEmploye = 0;
 
           echo "<tr>";
-          echo "<td>".$info['name']."</td>";
+          echo "<td style= 'width:240px;' >".$info['name']."</td>";
           echo "<td>".$info['badge']."</td>";
           echo "<td>".$info['usine']."</td>";
           echo "<td>".$info['poste']."</td>";
@@ -214,10 +215,10 @@ if(isset($_POST['view'])){
               $value = isset($info['values'][$date]) ? $info['values'][$date] : 0;
               $totalEmploye += $value;
 
-              echo "<td style='font-weight:bold;'>".number_format($value, 0, ',', ' ')."</td>";
+              echo "<td>".number_format($value, 0, ',', ' ')."</td>";
           }
 
-          echo "<td style='font-weight:bold; background:#d4edda;'>".number_format($totalEmploye, 0, ',', ' ')."</td>";
+          echo "<td style='font-weight:bold; width:140px;'>".number_format($totalEmploye, 0, ',', ' ')." Fbu</td>";
 
           echo "</tr>";
       }
@@ -271,13 +272,9 @@ if(isset($_POST['view'])){
   <!-- Page level custom scripts -->
   <script>
 $(document).ready(function () {
-    $('#dataTable').DataTable({
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-        }
-    });
-
     $('#dataTableHover').DataTable({
+        scrollX: true,
+        autoWidth: false,
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
         }

@@ -131,24 +131,31 @@ if(isset($_POST['save'])){
        <?php include "Includes/topbar.php";?>
         <!-- Topbar -->
 
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Ajouter un chef d'usine</h1>
+
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="downloadUsines.php">Exporter</a>(Exel)</li>
+              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              
+            </ol>
+
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Ajouter un chef</li>
             </ol>
           </div>
 
+          
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+         
+
           <div class="row">
             <div class="col-lg-12">
               <!-- Form Basic -->
               <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Ajouter un chef d'usine</h6>
-                    <?php echo $statusMsg; ?>
-                </div>
                 <div class="card-body">
                   <form method="post">
                    <div class="form-group row mb-3">
@@ -219,11 +226,8 @@ if(isset($_POST['save'])){
               <!-- Input Group -->
                  <div class="row">
               <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Tous les chefs</h6>
-                </div>
                 <div class="table-responsive p-3">
+                <h1 class="h3 mb-0 text-gray-800">Tous les chefs et leurs usines assignées</h1>
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>
@@ -286,9 +290,6 @@ if(isset($_POST['save'])){
         </div>
         <!---Container Fluid-->
       </div>
-      <!-- Footer -->
-       <?php include "Includes/footer.php";?>
-      <!-- Footer -->
     </div>
   </div>
 
@@ -304,20 +305,6 @@ if(isset($_POST['save'])){
    <!-- Page level plugins -->
   <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-  <!-- Page level custom scripts -->
-  <script>
-$(document).ready(function () {
-  $('#dataTableHover').DataTable({
-        scrollX: true,
-        autoWidth: false,
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-        }
-    });
-});
-</script>
-
 
 </body>
 

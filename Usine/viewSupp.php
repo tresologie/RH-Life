@@ -12,7 +12,19 @@ Where tblclassteacher.Id = '$_SESSION[userId]'";
 $rs = $conn->query($query);
 $num = $rs->num_rows;
 $rrw = $rs->fetch_assoc();
+$totalGeneral = 0;
 
+if(isset($_POST['view'])){
+  $dateTaken =  $_POST['dateTaken'];
+
+  $queryTotal = "SELECT SUM(FLOOR(tblsupp.montant / 100) * 100) as total
+                 FROM tblsupp
+                 WHERE tblsupp.dateTimeTaken = '$dateTaken' and tblsupp.classId = '$_SESSION[classId]'";
+
+  $resultTotal = $conn->query($queryTotal);
+  $rowTotal = $resultTotal->fetch_assoc();
+  $totalGeneral = $rowTotal['total'] ?? 0;
+}
 ?>
 
 <!DOCTYPE html>
@@ -41,25 +53,29 @@ $rrw = $rs->fetch_assoc();
         <!-- TopBar -->
        <?php include "Includes/topbar.php";?>
         <!-- Topbar -->
-
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Liste des heures supplementaires <b><?php echo $rrw['className'];?></b></h1>
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Heures supplementaires <b><?php echo $rrw['className'];?></b></h1>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="downloadSupp.php">Exporter</a>(Exel)</li>
+              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              
+            </ol>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Voir la liste des supp</li>
             </ol>
           </div>
 
+
+
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+         
+
           <div class="row">
             <div class="col-lg-12">
               <!-- Form Basic -->
               <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Voir la liste des heures supplementaires</h6>
-                    <?php echo $statusMsg; ?>
-                </div>
                 <div class="card-body">
                   <form method="post">
                     <div class="form-group row mb-3">
@@ -67,6 +83,20 @@ $rrw = $rs->fetch_assoc();
                         <label class="form-control-label">Selectionner la date<span class="text-danger ml-2">*</span></label>
                             <input type="date" class="form-control" name="dateTaken" id="exampleInputFirstName">
                         </div>
+
+
+                        <div class="col-xl-4">
+                          <h4 class="form-control-label">Somme</h6>
+
+                          <?php if(isset($_POST['view']) && $totalGeneral > 0){ ?>
+                             <h1 class="text-success form-control font-weight-bold" style="height:40px;font-size:20px;">
+                                 <?php echo number_format($totalGeneral, 0, ',', ' ') . " Fbu"; ?>
+                              </h1>
+                         <?php } else { ?>
+                             <h4 class="text-danger form-control font-weight-bold" style="height:40px;font-size:20px;"> 0 Fbu</h4><?php } 
+                         ?>
+
+                      </div>
                         
                     </div>
                     <button type="submit" name="view" class="btn btn-primary">Afficher</button>
@@ -78,9 +108,6 @@ $rrw = $rs->fetch_assoc();
                  <div class="row">
               <div class="col-lg-12">
               <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Heures supplementaires </h6>
-                </div>
                 <div class="table-responsive p-3 ">
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
@@ -102,9 +129,9 @@ $rrw = $rs->fetch_assoc();
 
                   <?php
 
-                    if(isset($_POST['view'])){
+                    
 
-                      $dateTaken =  $_POST['dateTaken'];
+                      
 
                       $query = "SELECT tblsupp.Id,tblsupp.dateTimeTaken,tblstudents.identite,
                       DATE_FORMAT(tblsupp.heureDebut, '%H:%i') AS heureDebut, 
@@ -146,10 +173,10 @@ $rrw = $rs->fetch_assoc();
                       {
                            echo   
                            "<div class='alert alert-danger' role='alert'>
-                            Non Trouvé!
+                            Entrez la date valide SVP!
                             </div>";
                       }
-                    }
+                    
                       ?>
                     </tbody>
                   </table>
@@ -163,9 +190,6 @@ $rrw = $rs->fetch_assoc();
         </div>
         <!---Container Fluid-->
       </div>
-      <!-- Footer -->
-       <?php include "Includes/footer.php";?>
-      <!-- Footer -->
     </div>
   </div>
 

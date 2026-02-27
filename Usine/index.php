@@ -42,9 +42,9 @@ include '../Includes/session.php';
         <!-- TopBar -->
            <?php include "Includes/topbar.php";?>
         <!-- Topbar -->
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Statistiques du <?php echo $todaysDate = date("d-m-Y");?>
             <b><?php echo $rrw['className'];?></b></h1>
             <ol class="breadcrumb">
@@ -52,6 +52,9 @@ include '../Includes/session.php';
               <li class="breadcrumb-item active" aria-current="page">Tableau de bord</li>
             </ol>
           </div>
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+        
 
       <div class="row mb-3">
           <!-- New User Card Example -->
@@ -159,13 +162,6 @@ include '../Includes/session.php';
             </div>
 
         </div>
-
-       
-        <div class="container-fluid" id="container-wrapper">
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        </div>
-        </div>
-
         <div class="row mb-3">
           <!-- New User Card Example -->
           <?php 
@@ -273,17 +269,10 @@ include '../Includes/session.php';
                   </div>
                 </div>
               </div>
-            </div>
-
-
-        </div>
 
 
         <!---Container Fluid-->
       </div>
-      <!-- Footer -->
-      <?php include 'includes/footer.php';?>
-      <!-- Footer -->
     </div>
   </div>
 

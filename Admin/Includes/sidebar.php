@@ -3,11 +3,11 @@
         <div class="sidebar-brand-icon" >
           <img src="img/logo/life.jpg">
         </div>
-        <div class="sidebar-brand-text mx-3">RH-Life</div>
+        <div class="sidebar-brand-text mx-3">HRMS-Life</div>
       </a>
 
       <div class="sidebar-heading">
-</br> Statistique
+      </br> Statistique
       </div>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrapschemes"
@@ -25,40 +25,16 @@
           </div>
         </div>
       </li>
-      
-
-
-      <hr class="sidebar-divider">
-      <div class="sidebar-heading">
-        Usines
-      </div>
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
-          aria-expanded="true" aria-controls="collapseBootstrap">
-          <i class="fas fa-chalkboard" style="color: blue;"></i>
-          <span>Gérer les usines</span>
-        </a>
-        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Gérer les usines</h6>
-            <a class="collapse-item" href="createClass.php">Ajouter une usine</a>
-            <a class="collapse-item" href="createClassTeacher.php">Ajouter un chef</a>
-            <a class="collapse-item" href="downloadUsines.php">Liste des usines et</br> chefs(Excel)</a>
-          
-          </div>
-        </div>
-      </li>
   
-
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
-        Employés
+        Appel
       </div>
       </li>
        <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap2"
           aria-expanded="true" aria-controls="collapseBootstrap2">
-          <i class="fas fa-user-graduate" style="color: blue;"></i>
+          <i class="fas fa-chart-bar" style="color: blue;"></i>
           <span>Gérer les employés</span>
         </a>
         <div id="collapseBootstrap2" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
@@ -66,7 +42,8 @@
             <h6 class="collapse-header">Gérer les employés</h6>
             <a class="collapse-item" href="createStudents.php">Ajouter un employé</a>
             <a class="collapse-item" href="viewStudents.php">Voir les employés</a>
-            <a class="collapse-item" href="downloadEmployes.php">Tous les employés(Excel)</a>
+            <a class="collapse-item" href="viewStudentAttendance.php">Voir les présences</br>d'un employé</a>
+            <a class="collapse-item" href="viewPresences.php">Présences de tous les</br> employés</a>
            
           </div>
         </div>
@@ -88,11 +65,11 @@
             <h6 class="collapse-header">Supplémentaires</h6>
             <a class="collapse-item" href="viewSuppSelect.php">Heures suppl(un employé)</a>
             <a class="collapse-item" href="viewSuppAll.php">Heures suppl(Tous)</a>
-            <a class="collapse-item" href="#">Heures suppl(Excel)</a>
           </div>
         </div>
       </li>
-     
+
+
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
       Salaires
@@ -100,21 +77,42 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePage" aria-expanded="true"
           aria-controls="collapsePage">
-          <i class="fas fa-chart-bar" style="color: blue;"></i>
-          <span>Présences & Salaires</span>
+          <i class="fas fa-money-bill fa-2x" style="color: blue;"></i>
+          <span>Gérer les les salaires</span>
         </a>
         <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Salaires</h6>
-            <a class="collapse-item" href="viewStudentAttendance.php">Voir les présences</br>d'un employé</a>
-            <a class="collapse-item" href="viewPresences.php">Présences de tous les</br> employés</a>
-            <a class="collapse-item" href="#">Salaire des employés</br>(Excel)</a>
+            <h6 class="collapse-header">Salaire</h6>
+            
+            <a class="collapse-item" href="#">Salaire des employés</a>
+            <a class="collapse-item" href="#">Salaire des employés</a>
+            <a class="collapse-item" href="#">Salaire des employés</a>
            
           </div>
         </div>
       </li>
-
-
+     
+    
+      <hr class="sidebar-divider">
+      <div class="sidebar-heading">
+        Usines
+      </div>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
+          aria-expanded="true" aria-controls="collapseBootstrap">
+          <i class="fas fa-chalkboard" style="color: blue;"></i>
+          <span>Gérer les usines</span>
+        </a>
+        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Gérer les usines</h6>
+            <a class="collapse-item" href="createClass.php">Ajouter une usine</a>
+            <a class="collapse-item" href="createClassTeacher.php">Ajouter un chef</a>
+            <a class="collapse-item" href="viewUsine.php">Liste des usines</br> et leurs chefs</a>
+          
+          </div>
+        </div>
+      </li>
       <hr class="sidebar-divider">
       <div class="version" id="version-ruangadmin"></div>
     </ul>

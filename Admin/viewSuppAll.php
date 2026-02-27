@@ -4,7 +4,41 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+$totalGeneral = 0;
 
+
+
+if(isset($_POST['view'])){
+
+  $type = $_POST['type'];
+
+  if($type == "2"){
+      $singleDate = $_POST['singleDate'];
+      $fromDate = $singleDate;
+      $toDate = $singleDate;
+
+  } elseif($type == "3"){
+      $fromDate = $_POST['fromDate'];
+      $toDate = $_POST['toDate'];
+
+      $diff = (strtotime($toDate) - strtotime($fromDate)) / (60*60*24) + 1;
+      if($diff > 7){
+          $toDate = date('Y-m-d', strtotime($fromDate. ' + 6 days'));
+      }
+
+  } else {
+      $toDate = date('Y-m-d');
+      $fromDate = date('Y-m-d', strtotime('-6 days'));
+  }
+
+  $queryTotal = "SELECT SUM(FLOOR(tblsupp.montant / 100) * 100) as total
+                 FROM tblsupp
+                 WHERE tblsupp.dateTimeTaken BETWEEN '$fromDate' AND '$toDate'";
+
+  $resultTotal = $conn->query($queryTotal);
+  $rowTotal = $resultTotal->fetch_assoc();
+  $totalGeneral = $rowTotal['total'] ?? 0;
+}
 
 ?>
 
@@ -59,31 +93,33 @@ include '../Includes/session.php';
         <!-- TopBar -->
        <?php include "Includes/topbar.php";?>
         <!-- Topbar -->
+        
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Heures supplémentaires jusqu'à 7 jours</h1>
 
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Heures supplémentaires</h1>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Exporter</a>(Exel)</li>
+              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              
+            </ol>
+
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Heures suppl</li>
             </ol>
           </div>
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+         
 
           <div class="row">
             <div class="col-lg-12">
               <!-- Form Basic -->
               <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Voir les heures supplémentaires</h6>
-                    <?php echo $statusMsg; ?>
-                </div>
                 <div class="card-body">
                   <form method="post">
                     <div class="form-group row mb-3">
-                   
-                    
-                        <div class="col-xl-4">
+                        <div class="col-xl-6">
                         <label class="form-control-label">Un jour/7jours/De ...à...<span class="text-danger ml-2">*</span></label>
                           <select required name="type" onchange="typeDropDown(this.value)" class="form-control mb-3">
                           <option value="">--Choisir--</option>
@@ -92,7 +128,20 @@ include '../Includes/session.php';
                           <option value="3" >De ...à...</option>
                         </select>
                         </div>
+                        <div class="col-xl-4">
+                          <h4 class="form-control-label">Somme</h6>
+
+                          <?php if(isset($_POST['view']) && $totalGeneral > 0){ ?>
+                             <h1 class="form-control font-weight-bold" style="color:#6777EF;height:40px;font-size:20px;">
+                                 <?php echo number_format($totalGeneral, 0, ',', ' ') . " Fbu"; ?>
+                              </h1>
+                         <?php } else { ?>
+                             <h4 class="text-danger form-control font-weight-bold" style="height:40px;font-size:20px;"> 0 Fbu</h4><?php } 
+                         ?>
+
+                      </div>
                     </div>
+    
                       <?php
                         echo"<div id='txtHint'></div>";
                       ?>
@@ -106,38 +155,10 @@ include '../Includes/session.php';
                  <div class="row">
               <div class="col-lg-12">
               <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Heures supplémentaires</h6>
-                </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
 
                   <?php
-
-if(isset($_POST['view'])){
-
-  $type = $_POST['type'];
-
-  // Déterminer la période
-  if($type == "2"){ // Single date
-      $singleDate = $_POST['singleDate'];
-      $fromDate = $singleDate;
-      $toDate = $singleDate;
-
-  } elseif($type == "3"){ // Date Range
-      $fromDate = $_POST['fromDate'];
-      $toDate = $_POST['toDate'];
-
-      // Limiter à 7 jours max
-      $diff = (strtotime($toDate) - strtotime($fromDate)) / (60*60*24) + 1;
-      if($diff > 7){
-          $toDate = date('Y-m-d', strtotime($fromDate. ' + 6 days'));
-      }
-
-  } else { // Tous les jours / par défaut
-      $toDate = date('Y-m-d'); // aujourd'hui
-      $fromDate = date('Y-m-d', strtotime('-6 days')); // 7 jours
-  }
 
   // Requête SQL
   $query = "SELECT 
@@ -160,12 +181,14 @@ if(isset($_POST['view'])){
   // Préparer le tableau
   $dates = [];
   $data = [];
+  $totalGeneral = 0;
 
   while ($row = $rs->fetch_assoc()) {
 
       $emp = $row['admissionNumber'];
       $date = $row['dateTimeTaken'];
       $montant = $row['montant'];
+      $totalGeneral += $montant;
 
       // Stocker dates uniques
       $dates[$date] = $date;
@@ -230,12 +253,12 @@ if(isset($_POST['view'])){
       echo "<tr>
               <td colspan='".(count($dates)+5)."'>
                   <div class='alert alert-danger'>
-                      Non trouvés!
+                      Entrez la date valide SVP!
                   </div>
               </td>
             </tr>";
   }
-}
+
                     
                       ?>
                     </tbody>
@@ -250,9 +273,6 @@ if(isset($_POST['view'])){
         </div>
         <!---Container Fluid-->
       </div>
-      <!-- Footer -->
-       <?php include "Includes/footer.php";?>
-      <!-- Footer -->
     </div>
   </div>
 

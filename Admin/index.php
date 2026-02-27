@@ -42,15 +42,19 @@ include '../Includes/session.php';
         <!-- TopBar -->
            <?php include "Includes/topbar.php";?>
         <!-- Topbar -->
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Statistique du <?php echo $todaysDate = date("d-m-Y");?></h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Tableau</li>
             </ol>
           </div>
+
+
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+       
           <div class="row mb-3">
           <!-- Students Card -->
           <?php 
@@ -273,9 +277,6 @@ $absent = $students-$totAttendance;
 
         <!---Container Fluid-->
       </div>
-      <!-- Footer -->
-      <?php include 'includes/footer.php';?>
-      <!-- Footer -->
     </div>
   </div>
 

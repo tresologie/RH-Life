@@ -4,20 +4,10 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
-$query = "SELECT tblclass.className
-    FROM tblclassteacher
-    INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
-    
-    Where tblclassteacher.Id = '$_SESSION[userId]'";
-
-    $rs = $conn->query($query);
-    $num = $rs->num_rows;
-    $rrw = $rs->fetch_assoc();
-
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -26,7 +16,7 @@ $query = "SELECT tblclass.className
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/logo/life.jpg" rel="icon">
-  <title>Tous les employés</title>
+<?php include 'includes/title.php';?>
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -44,57 +34,48 @@ $query = "SELECT tblclass.className
         <!-- TopBar -->
        <?php include "Includes/topbar.php";?>
         <!-- Topbar -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Tous les employés</h1>
 
+
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Liste des usines et leurs chefs</h1>
 
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="downloadEmployes.php">Exporter</a>(Exel)</li>
+              <li class="breadcrumb-item"><a href="downloadUsines.php">Exporter</a>(Exel)</li>
               <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
               
             </ol>
 
-
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Tous les employés</li>
+              <li class="breadcrumb-item active" aria-current="page">Ajouter un chef</li>
             </ol>
           </div>
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
-        
 
-          <div class="row">
-            <div class="col-lg-12">
-              <!-- Form Basic -->
+          
 
 
               <!-- Input Group -->
                  <div class="row">
               <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>
                         <th>#</th>
-                        <th>Nom & Prénom</th>
-                        <th>Badge</th>
+                        <th>Nom & Prenom</th>
+                        <th>Email</th>
+                        <th>Tel</th>
                         <th>Usine</th>
-                        <th>Poste</th>
                         <th>Date</th>
-                        
                       </tr>
                     </thead>
-                    
+                   
                     <tbody>
 
                   <?php
-                      $query = "SELECT tblstudents.Id,tblclass.className,tblstudents.firstName,tblstudents.identite,
-                      tblstudents.lastName,tblstudents.admissionNumber,poste,tblstudents.dateCreated
-                      FROM tblstudents
-                      INNER JOIN tblclass ON tblclass.Id = tblstudents.classId 
-                      ORDER BY tblstudents.firstName ASC";
+                      $query = "SELECT tblclassteacher.Id,tblclass.className,tblclassteacher.firstName,
+                      tblclassteacher.lastName,tblclassteacher.emailAddress,tblclassteacher.phoneNo,tblclassteacher.dateCreated
+                      FROM tblclassteacher
+                      INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId";
                       $rs = $conn->query($query);
                       $num = $rs->num_rows;
                       $sn=0;
@@ -107,13 +88,12 @@ $query = "SELECT tblclass.className
                             echo"
                               <tr>
                                 <td>".$sn."</td>
-                                <td><b>".$rows['firstName']." ".$rows['lastName']."</b> </br> ".$rows['identite']."</td>
-                                <td>".$rows['admissionNumber']."</td>
+                                <td>".$rows['firstName'].'  '.$rows['lastName']."</td>
+                                <td>".$rows['emailAddress']."</td>
+                                <td>".$rows['phoneNo']."</td>
                                 <td>".$rows['className']."</td>
-                                <td>".$rows['poste']."</td>
-                                
                                 <td>".$rows['dateCreated']."</td>
-                               
+                                
                               </tr>";
                           }
                       }
@@ -121,7 +101,7 @@ $query = "SELECT tblclass.className
                       {
                            echo   
                            "<div class='alert alert-danger' role='alert'>
-                            Non trouvés!
+                            Non trouvé!
                             </div>";
                       }
                       
@@ -133,7 +113,7 @@ $query = "SELECT tblclass.className
             </div>
             </div>
           </div>
-          
+         
 
         </div>
         <!---Container Fluid-->
@@ -153,20 +133,6 @@ $query = "SELECT tblclass.className
    <!-- Page level plugins -->
   <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-  <!-- Page level custom scripts -->
-  <script>
-$(document).ready(function () {
-  $('#dataTableHover').DataTable({
-        scrollX: true,
-        autoWidth: false,
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-        }
-    });
-});
-</script>
-
 
 </body>
 

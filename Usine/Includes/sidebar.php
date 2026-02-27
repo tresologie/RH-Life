@@ -13,50 +13,28 @@
       </li> 
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
-        Employés
+        Appel
       </div>
       </li>
        <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap2"
           aria-expanded="true" aria-controls="collapseBootstrap2">
-          <i class="fas fa-user-graduate" style="color: blue;"></i>
+          <i class="fa fa-calendar-alt" style="color: blue;"></i>
           <span>Gérer les employés</span>
         </a>
         <div id="collapseBootstrap2" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Gérer les employés</h6>
-            <a class="collapse-item" href="viewStudents.php">Voir les employés</a>
-            <a class="collapse-item" href="downloadEmployesUsine.php">Liste des employés(Excel)</a>
-            
-          </div>
-        </div>
-      </li>
-      <hr class="sidebar-divider">
-      <div class="sidebar-heading">
-      Appel
-      </div>
-      </li>
-      
-       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrapcon"
-          aria-expanded="true" aria-controls="collapseBootstrapcon">
-          <i class="fa fa-calendar-alt" style="color: blue;"></i>
-          <span>Gérer les appels</span>
-        </a>
-        <div id="collapseBootstrapcon" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Gérer les appels</h6>
+            <a class="collapse-item" href="viewStudents.php">Liste des employés</a>
             <a class="collapse-item" href="takeAttendance.php">Faire l'appel</a>
             <a class="collapse-item" href="refaireAppel.php">Refaire l'appel</a>
             <a class="collapse-item" href="viewAttendance.php">Voir la liste d'appel</a>
             <a class="collapse-item" href="viewStudentAttendance.php">Voir l'appel d'un employé</a>
-            <a class="collapse-item" href="downloadRecord.php">Rapport de l'appel(Excel)</a>
-
-          
+            
           </div>
         </div>
       </li>
-
+ 
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
         Supplémentaires
@@ -73,7 +51,6 @@
             <a class="collapse-item" href="takeHeuresSupp.php">Ajouter les heures supp</a>
             <a class="collapse-item" href="viewSupp.php">Voir les heures supp</a>
             <a class="collapse-item" href="viewSuppSelect.php">Heures suppl(un employé)</a>
-            <a class="collapse-item" href="downloadSupp.php">Rapport des heures</br>supplémentaires(Excel)</a>
 
           </div>
         </div>

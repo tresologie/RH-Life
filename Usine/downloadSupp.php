@@ -54,7 +54,7 @@ echo "<table border='1'>
 <th>Poste</th>
 <th>Debut</th>
 <th>Fin</th>
-<th>H</th>
+<th>Heures</th>
 <th>Montant</th>
 <th>Signature</th>
 </tr>

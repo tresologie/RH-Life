@@ -2,8 +2,13 @@
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
-// Récupérer toutes les classes qui ont des étudiants
-$queryClasses = mysqli_query($conn, "SELECT DISTINCT classId FROM tblstudents ORDER BY classId ASC");
+// Récupérer toutes les classes qui ont au moins un étudiant et leur nom
+$queryClasses = mysqli_query($conn, "
+    SELECT DISTINCT s.classId, c.className
+    FROM tblstudents s
+    INNER JOIN tblclass c ON s.classId = c.Id
+    ORDER BY s.classId ASC
+");
 ?>
 
 <!DOCTYPE html>
@@ -32,44 +37,40 @@ $queryClasses = mysqli_query($conn, "SELECT DISTINCT classId FROM tblstudents OR
             <li class="breadcrumb-item"><a href="./">Accueil</a></li>
             <li class="breadcrumb-item active" aria-current="page">Tableau</li>
           </ol>
-        </div>
-
+      </div>
 
       <div class="container-fluid" id="container-wrapper">
-     
 
-        <?php
-        // Parcourir chaque classe
-        while ($class = mysqli_fetch_assoc($queryClasses)) {
+        <?php while ($class = mysqli_fetch_assoc($queryClasses)) { 
             $classId = $class['classId'];
+            $className = $class['className'];
 
-            // Nom de la classe
-            $queryClassName = mysqli_query($conn, "SELECT className FROM tblclass WHERE Id = '$classId'");
-            $classNameRow = mysqli_fetch_assoc($queryClassName);
-            $className = $classNameRow['className'];
+            // Total étudiants dans la classe
+            $queryStudents = mysqli_query($conn, "SELECT COUNT(*) AS total FROM tblstudents WHERE classId = '$classId'");
+            $studentsRow = mysqli_fetch_assoc($queryStudents);
+            $students = $studentsRow['total'];
 
-            // Total employés
-            $queryStudents = mysqli_query($conn, "SELECT * FROM tblstudents WHERE classId = '$classId'");
-            $students = mysqli_num_rows($queryStudents);
-
-            // Présents aujourd'hui
-            $queryPresent = mysqli_query($conn, "SELECT * FROM tblattendance WHERE classId = '$classId' 
-            AND status = '1' AND DATE(dateTimeTaken) = CURDATE()");
-            $totAttendance = mysqli_num_rows($queryPresent);
+            // Étudiants présents aujourd'hui
+            $queryPresent = mysqli_query($conn, "SELECT COUNT(*) AS total FROM tblattendance WHERE classId = '$classId' AND status = '1' AND DATE(dateTimeTaken) = CURDATE()");
+            $presentRow = mysqli_fetch_assoc($queryPresent);
+            $totAttendance = $presentRow['total'];
 
             // Absents
             $absent = $students - $totAttendance;
 
-            // Abandons
-            $queryAbandon = mysqli_query($conn, "SELECT admissionNo, COUNT(*) FROM tblattendance 
-            WHERE classId = '$classId' AND status = '0'
-            GROUP BY admissionNo HAVING COUNT(*) >= 5 "); 
+            // Abandons (>= 5 absences)
+            $queryAbandon = mysqli_query($conn, "
+                SELECT admissionNo 
+                FROM tblattendance 
+                WHERE classId = '$classId' AND status = '0'
+                GROUP BY admissionNo 
+                HAVING COUNT(*) >= 5
+            ");
             $abandon = mysqli_num_rows($queryAbandon);
         ?>
 
-        <!-- Ligne pour cette classe -->
-        <div class="row mb-4" >
-          <!-- Total employés -->
+        <div class="row mb-4">
+          <!-- Tous les employés -->
           <div class="col-xl-3 col-md-6 mb-4">
             <div class="card h-100">
               <div class="card-body">
@@ -136,9 +137,9 @@ $queryClasses = mysqli_query($conn, "SELECT DISTINCT classId FROM tblstudents OR
               </div>
             </div>
           </div>
-        </div> <!-- fin ligne classe -->
+        </div>
 
-        <?php } // fin while classes ?>
+        <?php } // fin while ?>
 
       </div>
     </div>

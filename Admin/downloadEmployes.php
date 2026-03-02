@@ -67,7 +67,7 @@ echo '
 <td>'.$row['admissionNumber'].'</td>
 <td>'.$row['className'].'</td> 
 <td>'.$row['poste'].'</td>	
-<td>'.$row['salaire'].'Fbu</td>	 
+<td>'.number_format($row['salaire'], 0, ',', ' ').' Fbu</td> 
 <td>'.$row['dateCreated'].'</td>	 					
 </tr>  
 ';

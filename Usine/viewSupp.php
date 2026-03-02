@@ -1,26 +1,37 @@
-
 <?php 
 error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+// Date par défaut = aujourd'hui
+$dateTaken = date('Y-m-d');
+$totalGeneral = 0;
+
+// Classe de l'enseignant
 $query = "SELECT tblclass.className
 FROM tblclassteacher
 INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
 Where tblclassteacher.Id = '$_SESSION[userId]'";
-
 $rs = $conn->query($query);
-$num = $rs->num_rows;
 $rrw = $rs->fetch_assoc();
-$totalGeneral = 0;
 
+// Si l'utilisateur choisit une date
 if(isset($_POST['view'])){
-  $dateTaken =  $_POST['dateTaken'];
+  $dateTaken = $_POST['dateTaken']; // remplace la valeur par la sélection
 
+  // Calculer la somme
   $queryTotal = "SELECT SUM(FLOOR(tblsupp.montant / 100) * 100) as total
                  FROM tblsupp
-                 WHERE tblsupp.dateTimeTaken = '$dateTaken' and tblsupp.classId = '$_SESSION[classId]'";
+                 WHERE tblsupp.dateTimeTaken = '$dateTaken' AND tblsupp.classId = '$_SESSION[classId]'";
 
+  $resultTotal = $conn->query($queryTotal);
+  $rowTotal = $resultTotal->fetch_assoc();
+  $totalGeneral = $rowTotal['total'] ?? 0;
+} else {
+  // Si formulaire pas soumis, calculer quand même le total d'aujourd'hui
+  $queryTotal = "SELECT SUM(FLOOR(tblsupp.montant / 100) * 100) as total
+                 FROM tblsupp
+                 WHERE tblsupp.dateTimeTaken = '$dateTaken' AND tblsupp.classId = '$_SESSION[classId]'";
   $resultTotal = $conn->query($queryTotal);
   $rowTotal = $resultTotal->fetch_assoc();
   $totalGeneral = $rowTotal['total'] ?? 0;
@@ -57,7 +68,7 @@ if(isset($_POST['view'])){
             <h1 class="h3 mb-0 text-gray-800">Heures supplementaires <b><?php echo $rrw['className'];?></b></h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadSupp.php">Exporter</a>(Exel)</li>
-              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              <li class="breadcrumb-item"><a href="printSuppl.php">Imprimer</a>(PDF)</li>
               
             </ol>
             <ol class="breadcrumb">
@@ -87,14 +98,13 @@ if(isset($_POST['view'])){
 
                         <div class="col-xl-4">
                           <h4 class="form-control-label">Somme</h6>
-
-                          <?php if(isset($_POST['view']) && $totalGeneral > 0){ ?>
-                             <h1 class="text-success form-control font-weight-bold" style="height:40px;font-size:20px;">
-                                 <?php echo number_format($totalGeneral, 0, ',', ' ') . " Fbu"; ?>
-                              </h1>
-                         <?php } else { ?>
-                             <h4 class="text-danger form-control font-weight-bold" style="height:40px;font-size:20px;"> 0 Fbu</h4><?php } 
-                         ?>
+                          <?php if($totalGeneral > 0){ ?>
+        <h1 class="text-success form-control font-weight-bold" style="height:40px;font-size:20px;">
+            <?php echo number_format($totalGeneral, 0, ',', ' ') . " Fbu"; ?>
+        </h1>
+    <?php } else { ?>
+        <h4 class="text-danger form-control font-weight-bold" style="height:40px;font-size:20px;">0 Fbu</h4>
+    <?php } ?>
 
                       </div>
                         

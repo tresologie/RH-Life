@@ -1,0 +1,136 @@
+<?php
+require '../vendor/autoload.php'; 
+include '../Includes/dbcon.php';
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
+// ===== Dates =====
+$fromDate = $_GET['from'] ?? date('Y-m-d', strtotime('-6 days'));
+$toDate   = $_GET['to'] ?? date('Y-m-d');
+
+// Limiter à 7 jours max
+$diff = (strtotime($toDate) - strtotime($fromDate)) / (60*60*24) + 1;
+if($diff > 7){
+    $toDate = date('Y-m-d', strtotime($fromDate. ' + 6 days'));
+}
+
+// ===== Requête =====
+$query = "SELECT 
+    tblstudents.admissionNumber,
+    tblstudents.firstName,
+    tblstudents.lastName,
+    tblstudents.identite,
+    tblstudents.poste,
+    tblclass.className,
+    tblsupp.dateTimeTaken,
+    FLOOR(tblsupp.montant / 100) * 100 AS montant
+FROM tblsupp
+INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
+INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
+WHERE tblsupp.dateTimeTaken BETWEEN '$fromDate' AND '$toDate'
+ORDER BY tblstudents.firstName ASC";
+
+$result = $conn->query($query);
+
+// ===== Préparer les données =====
+$dates = [];
+$data  = [];
+
+while($row = $result->fetch_assoc()){
+    $emp = $row['admissionNumber'];
+    $date = $row['dateTimeTaken'];
+    $montant = $row['montant'];
+
+    $dates[$date] = $date;
+
+    $data[$emp]['name']  = $row['firstName'].' '.$row['lastName'];
+    $data[$emp]['identite'] = $row['identite'];
+    $data[$emp]['badge'] = $row['admissionNumber'];
+    $data[$emp]['usine'] = $row['className'];
+    $data[$emp]['poste'] = $row['poste'];
+    $data[$emp]['values'][$date] = $montant;
+}
+
+// Trier les dates et limiter à 7
+ksort($dates);
+$dates = array_slice($dates, 0, 7, true);
+
+// ===== HTML =====
+$html = '
+<style>
+body { font-family: Arial, sans-serif; font-size: 12px; }
+.header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.title { text-align: center; font-size: 16px; font-weight: bold; text-decoration: underline; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #000; padding: 5px; text-align: left; }
+th { background-color: #ccc; }
+tr:nth-child(even) { background-color: #f2f2f2; }
+</style>
+
+<div class="header">
+<div> Life campony </div>
+<div>Le '.date("d-m-Y").'</div>
+<div class="title">Heures supplementaires de cette semaine</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Nom & Prénom</th>
+<th>No d_identite</th>
+<th>Badge</th>
+<th>Usine</th>
+<th>Poste</th>';
+
+foreach($dates as $date){
+    $html .= '<th>'.date("d/m", strtotime($date)).'</th>';
+}
+$html .= '<th>Total</th></tr></thead><tbody>';
+
+// ===== Lignes par employé =====
+$totalGeneral = 0;
+$cnt = 1;
+foreach($data as $emp => $info){
+    $totalEmp = 0;
+    $html .= '<tr>';
+    $html .= '<td>'.$cnt.'</td>';
+    $html .= '<td>'.$info['name'].'</td>';
+    $html .= '<td>'.$info['identite'].'</td>';
+    $html .= '<td>'.$info['badge'].'</td>';
+    $html .= '<td>'.$info['usine'].'</td>';
+    $html .= '<td>'.$info['poste'].'</td>';
+
+    foreach($dates as $date){
+        $value = $info['values'][$date] ?? 0;
+        $totalEmp += $value;
+        $html .= '<td>'.number_format($value,0,',',' ').' Fbu</td>';
+    }
+
+    $html .= '<td><b>'.number_format($totalEmp,0,',',' ').' Fbu</b></td>';
+    $html .= '</tr>';
+
+    $totalGeneral += $totalEmp;
+    $cnt++;
+}
+
+// ===== Total général =====
+$html .= '<tr>
+<td colspan="'.(6+count($dates)).'" style="text-align:right;font-weight:bold;">TOTAL GENERAL</td>
+<td style="font-weight:bold;">'.number_format($totalGeneral,0,',',' ').' Fbu</td>
+</tr>';
+
+$html .= '</tbody></table>';
+
+// ===== Génération PDF =====
+$options = new Options();
+$options->set('isHtml5ParserEnabled', true);
+$options->set('isRemoteEnabled', true);
+
+$dompdf = new Dompdf($options);
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'landscape'); 
+$dompdf->render();
+$dompdf->stream("heures_supplementaires.pdf", ["Attachment" => true]);
+exit;
+?>

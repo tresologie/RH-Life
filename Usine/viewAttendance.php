@@ -47,7 +47,7 @@ $rrw = $rs->fetch_assoc();
             <h1 class="h3 mb-0 text-gray-800">Liste d'appel <b><?php echo $rrw['className'];?></b></h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadRecord.php">Exporter</a>(Exel)</li>
-              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              <li class="breadcrumb-item"><a href="printRecord.php">Imprimer</a>(PDF)</li>
               
             </ol>
             <ol class="breadcrumb">

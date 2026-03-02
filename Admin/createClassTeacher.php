@@ -90,7 +90,9 @@ if(isset($_POST['save'])){
 
         if ($query) {
 
-          $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;'>Le chef d'usine supprimé avec succes!</div>";
+          echo "<script type = \"text/javascript\">
+          window.location = (\"createClassTeacher.php\")
+          </script>"; 
         }
           else{
 

@@ -1,45 +1,85 @@
-
-<?php 
+<?php
 error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
-$totalGeneral = 0;
-
-
-
+// ===== Dates par défaut (7 derniers jours) =====
 if(isset($_POST['view'])){
+    $type = $_POST['type'];
 
-  $type = $_POST['type'];
-
-  if($type == "2"){
-      $singleDate = $_POST['singleDate'];
-      $fromDate = $singleDate;
-      $toDate = $singleDate;
-
-  } elseif($type == "3"){
-      $fromDate = $_POST['fromDate'];
-      $toDate = $_POST['toDate'];
-
-      $diff = (strtotime($toDate) - strtotime($fromDate)) / (60*60*24) + 1;
-      if($diff > 7){
-          $toDate = date('Y-m-d', strtotime($fromDate. ' + 6 days'));
-      }
-
-  } else {
-      $toDate = date('Y-m-d');
-      $fromDate = date('Y-m-d', strtotime('-6 days'));
-  }
-
-  $queryTotal = "SELECT SUM(FLOOR(tblsupp.montant / 100) * 100) as total
-                 FROM tblsupp
-                 WHERE tblsupp.dateTimeTaken BETWEEN '$fromDate' AND '$toDate'";
-
-  $resultTotal = $conn->query($queryTotal);
-  $rowTotal = $resultTotal->fetch_assoc();
-  $totalGeneral = $rowTotal['total'] ?? 0;
+    if($type == "2"){
+        $singleDate = $_POST['singleDate'];
+        $fromDate = $singleDate;
+        $toDate = $singleDate;
+    } elseif($type == "3"){
+        $fromDate = $_POST['fromDate'];
+        $toDate = $_POST['toDate'];
+        $diff = (strtotime($toDate) - strtotime($fromDate)) / (60*60*24) + 1;
+        if($diff > 7){
+            $toDate = date('Y-m-d', strtotime($fromDate. ' + 6 days'));
+        }
+    } else {
+        $toDate = date('Y-m-d');
+        $fromDate = date('Y-m-d', strtotime('-6 days'));
+    }
+} else {
+    // par défaut : 7 derniers jours
+    $toDate = date('Y-m-d');
+    $fromDate = date('Y-m-d', strtotime('-6 days'));
 }
 
+// ===== Requête pour récupérer les données =====
+$query = "SELECT 
+    tblstudents.admissionNumber,
+    tblstudents.firstName,
+    tblstudents.lastName,
+    tblstudents.identite,
+    tblstudents.poste,
+    tblclass.className,
+    tblsupp.dateTimeTaken,
+    FLOOR(tblsupp.montant / 100) * 100 AS montant
+FROM tblsupp
+INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
+INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
+WHERE tblsupp.dateTimeTaken BETWEEN '$fromDate' AND '$toDate'
+ORDER BY tblstudents.firstName ASC";
+
+$rs = $conn->query($query);
+
+// ===== Préparer le tableau et total =====
+$dates = [];
+$data  = [];
+$totalGeneral = 0;
+
+while($row = $rs->fetch_assoc()){
+    $emp = $row['admissionNumber'];
+    $date = $row['dateTimeTaken'];
+    $montant = $row['montant'];
+
+    $dates[$date] = $date;
+
+    $data[$emp]['name']  = $row['firstName'].' '.$row['lastName'].' '.$row['identite'];
+    $data[$emp]['badge'] = $row['admissionNumber'];
+    $data[$emp]['usine'] = $row['className'];
+    $data[$emp]['poste'] = $row['poste'];
+
+    $data[$emp]['values'][$date] = $montant;
+}
+
+// Trier et limiter à 7 dates max
+ksort($dates);
+$dates = array_slice($dates, 0, 7, true);
+
+// ===== Calcul du total général basé sur les 7 dates =====
+$totalGeneral = 0;
+foreach($data as $emp => $info){
+    $totalEmp = 0;
+    foreach($dates as $date){
+        $value = isset($info['values'][$date]) ? $info['values'][$date] : 0;
+        $totalEmp += $value;
+    }
+    $totalGeneral += $totalEmp;
+}
 ?>
 
 <!DOCTYPE html>
@@ -98,8 +138,10 @@ if(isset($_POST['view'])){
             <h1 class="h3 mb-0 text-gray-800">Heures supplémentaires jusqu'à 7 jours</h1>
 
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Exporter</a>(Exel)</li>
-              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              <li class="breadcrumb-item"><a href="downloadSuppl.php?from=<?php echo $fromDate;?>
+              &to=<?php echo $toDate;?>" >Exporter</a>(Exel)</li>
+              <li class="breadcrumb-item"><a href="printSuppl.php?from=<?php echo $fromDate;?>
+              &to=<?php echo $toDate;?>" >Imprimer</a>(PDF)</li>
               
             </ol>
 
@@ -129,17 +171,15 @@ if(isset($_POST['view'])){
                         </select>
                         </div>
                         <div class="col-xl-4">
-                          <h4 class="form-control-label">Somme</h6>
+    <h4 class="form-control-label">Somme</h4>
 
-                          <?php if(isset($_POST['view']) && $totalGeneral > 0){ ?>
-                             <h1 class="form-control font-weight-bold" style="color:#6777EF;height:40px;font-size:20px;">
-                                 <?php echo number_format($totalGeneral, 0, ',', ' ') . " Fbu"; ?>
-                              </h1>
-                         <?php } else { ?>
-                             <h4 class="text-danger form-control font-weight-bold" style="height:40px;font-size:20px;"> 0 Fbu</h4><?php } 
-                         ?>
-
-                      </div>
+    <h1 class="form-control font-weight-bold" style="color:#6777EF;height:40px;font-size:20px;">
+        <?php 
+            // Affiche 0 si aucun total, sinon le total général
+            echo number_format($totalGeneral ?? 0, 0, ',', ' ') . " Fbu"; 
+        ?>
+    </h1>
+</div>
                     </div>
     
                       <?php
@@ -160,51 +200,6 @@ if(isset($_POST['view'])){
 
                   <?php
 
-  // Requête SQL
-  $query = "SELECT 
-      tblstudents.admissionNumber,
-      tblstudents.firstName,
-      tblstudents.lastName,
-      tblstudents.identite,
-      tblstudents.poste,
-      tblclass.className,
-      tblsupp.dateTimeTaken,
-      FLOOR(tblsupp.montant / 100) * 100 AS montant
-      FROM tblsupp
-      INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
-      INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
-      WHERE tblsupp.dateTimeTaken BETWEEN '$fromDate' AND '$toDate'
-      ORDER BY tblstudents.firstName ASC";
-
-  $rs = $conn->query($query);
-
-  // Préparer le tableau
-  $dates = [];
-  $data = [];
-  $totalGeneral = 0;
-
-  while ($row = $rs->fetch_assoc()) {
-
-      $emp = $row['admissionNumber'];
-      $date = $row['dateTimeTaken'];
-      $montant = $row['montant'];
-      $totalGeneral += $montant;
-
-      // Stocker dates uniques
-      $dates[$date] = $date;
-
-      // Stocker données par employé
-      $data[$emp]['name'] = $row['firstName'].' '.$row['lastName'];
-      $data[$emp]['badge'] = $row['admissionNumber'];
-      $data[$emp]['usine'] = $row['className'];
-      $data[$emp]['poste'] = $row['poste'];
-
-      $data[$emp]['values'][$date] = $montant;
-  }
-
-  // Trier et limiter dates à 7 max
-  ksort($dates);
-  $dates = array_slice($dates, 0, 7, true);
 
   // Affichage du tableau
   if(!empty($data)){
@@ -228,7 +223,7 @@ if(isset($_POST['view'])){
           $totalEmploye = 0;
 
           echo "<tr>";
-          echo "<td style= 'width:400px;' >".$info['name']." ".$row['identite']."</td>";
+          echo "<td  >".$info['name']." ".$row['identite']."</td>";
           echo "<td>".$info['badge']."</td>";
           echo "<td>".$info['usine']."</td>";
           echo "<td>".$info['poste']."</td>";
@@ -241,7 +236,7 @@ if(isset($_POST['view'])){
               echo "<td>".number_format($value, 0, ',', ' ')."</td>";
           }
 
-          echo "<td style='font-weight:bold; width:140px;'>".number_format($totalEmploye, 0, ',', ' ')." Fbu</td>";
+          echo "<td style='font-weight:bold; '>".number_format($totalEmploye, 0, ',', ' ')." Fbu</td>";
 
           echo "</tr>";
       }

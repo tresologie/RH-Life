@@ -162,7 +162,7 @@ if(isset($_POST['save'])){
             <div class="col-lg-12">
               <!-- Form Basic -->
              
-                <div class="card-body">
+              <div class="card mb-4" style='padding:20px;'>
                   <form method="post">
                    <div class="form-group row mb-3">
                         <div class="col-xl-4">
@@ -239,12 +239,10 @@ if(isset($_POST['save'])){
                     }         
                     ?>
                   </form>
-                </div>
-              </div>
+                  </div>
 
               <!-- Input Group -->
-                 <div class="row">
-              <div class="col-lg-12">
+                
               <div class="card mb-4">
                 <div class="table-responsive p-3">
                 <h6 class="h3 mb-0 text-gray-800">Tous les employés</h6>
@@ -304,14 +302,12 @@ if(isset($_POST['save'])){
                       }
                       
                       ?>
-                    </tbody>
+                               </tbody>
                   </table>
                 </div>
               </div>
             </div>
-            </div>
-          </div>
-  
+
 
         </div>
         <!---Container Fluid-->

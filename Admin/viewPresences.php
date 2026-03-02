@@ -72,8 +72,12 @@ if(date('d') >= 28){
             <h1 class="h3 mb-0 text-gray-800">Présences des employés</h1>
 
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Exporter</a>(Exel)</li>
-              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              <li class="breadcrumb-item">
+              <a href="downloadPresences.php?fromDate=<?php echo $fromDate; ?>
+              &toDate=<?php echo $toDate; ?>"> Exporter</a>(Exel)</li>
+              <li class="breadcrumb-item">
+              <a href="printPresences.php?fromDate=<?php echo $fromDate; ?>
+              &toDate=<?php echo $toDate; ?>">Imprimer</a>(PDF)</li>
               
             </ol>
 
@@ -92,7 +96,7 @@ if(date('d') >= 28){
               <div class="card mb-4">
                 <div class="card-body">
                   <form method="post">
-                    <div class="form-group row mb-3" style="max-height:500px; overflow-y:auto; ">
+                    <div class="form-group row mb-3 ">
                    
                     
                         <div class="col-xl-4">
@@ -128,25 +132,34 @@ if(isset($_POST['view'])){
   $type = $_POST['type'];
 
   // Déterminer la période
-  if($type == "2"){ // Single date
-      $singleDate = $_POST['singleDate'];
-      $fromDate = $singleDate;
-      $toDate = $singleDate;
+  if($type == "1"){ // un mois
+    if(date('d') >= 28){
+      $fromDate = date('Y-m-28');
+      $toDate   = date('Y-m-28', strtotime('+1 month'));
+  } else {
+      $fromDate = date('Y-m-28', strtotime('-1 month'));
+      $toDate   = date('Y-m-28');
+  }
 
-  } elseif($type == "3"){ // Date Range
-      $fromDate = $_POST['fromDate'];
-      $toDate = $_POST['toDate'];
+   }elseif($type == "2"){ // Single date
+  $singleDate = $_POST['singleDate'];
+        $fromDate = $singleDate;
+       $toDate = $singleDate;
 
-      // Limiter à 7 jours max
+    }elseif($type == "3"){ // Date Range
+        $fromDate = $_POST['fromDate'];
+        $toDate = $_POST['toDate'];
+
+      // Limiter à 31 jours max
       $diff = (strtotime($toDate) - strtotime($fromDate)) / (60*60*24) + 1;
-      if($diff > 7){
-          $toDate = date('Y-m-d', strtotime($fromDate. ' + 6 days'));
+
+      if($diff > 31){
+          // Limiter à 31 jours maximum
+          $toDate = date('Y-m-d', strtotime($fromDate . ' +30 days'));
       }
 
-  } else { // Tous les jours / par défaut
-      $toDate = date('Y-m-d'); // aujourd'hui
-      $fromDate = date('Y-m-d', strtotime('-6 days')); // 7 jours
-  }
+   } 
+}
 
   // Requête SQL
   $query = "SELECT 
@@ -201,7 +214,7 @@ ORDER BY tblstudents.firstName ASC";
          echo "<th>".date("d/m", strtotime($date))."</th>";
          } 
          echo "<th>TOTAL</th>"; // colonne Total 
-         echo "</tr></thead><tbody>";
+         echo "</tr></thead>";
 
       foreach($data as $emp => $info){
 
@@ -211,7 +224,7 @@ ORDER BY tblstudents.firstName ASC";
         echo "<td>".$info['name']."</td>";
         echo "<td>".$info['badge']."</td>";
         echo "<td>".$info['usine']."</td>";
-        echo "<td>".$info['poste']."</td>";
+        echo "<td >".$info['poste']."</td>";
     
         foreach($dates as $date){
     
@@ -233,14 +246,14 @@ ORDER BY tblstudents.firstName ASC";
   } else {
 
       echo "<tr>
-              <td colspan='".(count($dates)+5)."'>
+              <td colspan='".(count($dates)+30)."'>
                   <div class='alert alert-danger'>
                       Non trouvés!
                   </div>
               </td>
             </tr>";
   }
-}
+
                     
                       ?>
                     </tbody>

@@ -235,9 +235,9 @@ if($rowVerif && $rowVerif['heures'] > 0 && in_array($adNo, $check)){
                                 <td>".$rows['firstName']."  ".$rows['lastName']."</td>
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
-                                <td><input class='heureDebut' name='heureDebut[]' type='time' value='01:00' style='width:80px;'></td>
-                                <td><input class='heureFin'   name='heureFin[]'   type='time' value='08:00' style='width:80px;'></td>
-                                <td><input class='duree'      name='heures[]'     type='number' value='7' style='width:60px;'></td>
+                                <td><input class='heureDebut' name='heureDebut[]' type='time' value='01:00' style='width:80px;color:#6e707e'></td>
+                                <td><input class='heureFin'   name='heureFin[]'   type='time' value='08:00' style='width:80px;color:#6e707e'></td>
+                                <td><input class='duree'      name='heures[]'     type='number' value='7' style='width:58px;color:#6e707e'></td>
 
                               
                                 <td><input name='check[]' type='checkbox' value=".$rows['admissionNumber']." class='form-control'></td>

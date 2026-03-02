@@ -50,7 +50,7 @@ $query = "SELECT tblclass.className
 
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadEmployes.php">Exporter</a>(Exel)</li>
-              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              <li class="breadcrumb-item"><a href="printEmployes.php">Imprimer</a>(PDF)</li>
               
             </ol>
 

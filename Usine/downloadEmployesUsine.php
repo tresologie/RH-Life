@@ -24,6 +24,7 @@ $rrw = $rs->fetch_assoc();
 
 
 // Date du jour
+date_default_timezone_set('Africa/Bujumbura');
 $todaysDate = date("d-m-Y");
 
 echo "

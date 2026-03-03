@@ -4,6 +4,8 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
+
 // Définir période du 28 au 28
 $today = date('Y-m-d');
 
@@ -174,7 +176,7 @@ FROM tblattendance
 INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
 INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
 WHERE tblattendance.dateTimeTaken BETWEEN '$fromDate' AND '$toDate'
-ORDER BY tblstudents.firstName ASC";
+ORDER BY tblclass.className, tblstudents.firstName ASC";
 
   $rs = $conn->query($query);
 

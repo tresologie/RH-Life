@@ -2,6 +2,7 @@
 error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
+date_default_timezone_set('Africa/Bujumbura');
 
 
 $query = "SELECT tblclass.className
@@ -53,7 +54,7 @@ $ret = mysqli_query($conn,"SELECT tblstudents.Id,tblstudents.dateCreated, tblcla
 tblstudents.firstName,tblstudents.lastName,tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste
  FROM tblstudents 
  INNER JOIN tblclass ON tblclass.Id = tblstudents.classId 
- ORDER BY tblstudents.firstName ASC");
+ ORDER BY tblclass.className, tblstudents.firstName ASC");
 
 if(mysqli_num_rows($ret) > 0 )
 {

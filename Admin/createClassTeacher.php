@@ -4,82 +4,126 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
+
 //------------------------SAVE--------------------------------------------------
 
 if(isset($_POST['save'])){
     
-    $firstName=$_POST['firstName'];
-  $lastName=$_POST['lastName'];
-  $emailAddress=$_POST['emailAddress'];
-  $phoneNo=$_POST['phoneNo'];
-  $password=$_POST['password'];
-  $classId=$_POST['classId'];
+  $firstName = trim($_POST['firstName']);
+  $lastName  = trim($_POST['lastName']);
+  $emailAddress = trim($_POST['emailAddress']);
+  $phoneNo = trim($_POST['phoneNo']);
+  $password = trim($_POST['password']);
+  $cpassword = trim($_POST['cpassword']);
+  $classId = $_POST['classId'];
   $dateCreated = date("Y-m-d");
-   
-    $query=mysqli_query($conn,"select * from tblclassteacher where emailAddress ='$emailAddress'");
-    $ret=mysqli_fetch_array($query);
 
-    $sampPass_2 = md5($password);
+  // Vérifier si les mots de passe correspondent
+  if($password !== $cpassword){
+      $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>
+          Les mots de passe ne correspondent pas !
+      </div>";
+  } else {
+      // Vérifier si l'email existe déjà
+      $query = mysqli_query($conn,"SELECT * FROM tblclassteacher WHERE emailAddress ='$emailAddress'");
+      $ret = mysqli_fetch_array($query);
 
-    if($ret > 0){ 
+      if($ret > 0){ 
+          $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>
+              Son Email existe déjà !
+          </div>";
+      } else {
+          // Hachage MD5 du mot de passe
+          $md5Password = md5($password);
 
-        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>Son Email existe déjà!</div>";
-    }
-    else{
+          // Insertion dans la BDD
+          $query = mysqli_query($conn,"INSERT INTO tblclassteacher 
+              (firstName, lastName, emailAddress, password, phoneNo, classId, dateCreated) 
+              VALUES ('$firstName', '$lastName', '$emailAddress', '$md5Password', '$phoneNo', '$classId', '$dateCreated')");
 
-    $query=mysqli_query($conn,"INSERT into tblclassteacher(firstName,lastName,emailAddress,password,phoneNo,classId,dateCreated) 
-    value('$firstName','$lastName','$emailAddress','$sampPass_2','$phoneNo','$classId','$dateCreated')");
-
-    if ($query) {
-       
-    $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;'>
-    Le chef d'usine ajouté avec succes!</div>";
-
-    }
-    else
-    {
-         $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>Ereur!</div>";
-    }
+          if($query){
+              $statusMsg = "<div class='alert alert-success' style='margin-right:700px;'>
+                  Le chef d'usine ajouté avec succès !
+              </div>";
+          } else {
+              $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>
+                  Erreur lors de l'ajout !
+              </div>";
+          }
+      }
   }
 }
 
 //--------------------EDIT------------------------------------------------------------
 
- if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "edit")
-	{
-        $Id= $_GET['Id'];
+if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "edit") {
 
-        $query=mysqli_query($conn,"select * from tblclassteacher where Id ='$Id'");
-        $row=mysqli_fetch_array($query);
+  $Id = $_GET['Id'];
 
-        //------------UPDATE-----------------------------
+  // Récupérer les données existantes pour pré-remplir le formulaire
+  $query = mysqli_query($conn, "SELECT * FROM tblclassteacher WHERE Id ='$Id'");
+  $row = mysqli_fetch_array($query);
 
-        if(isset($_POST['update'])){
-    
-             $firstName=$_POST['firstName'];
-              $lastName=$_POST['lastName'];
-              $emailAddress=$_POST['emailAddress'];
-              $phoneNo=$_POST['phoneNo'];
-              $classId=$_POST['classId'];
-              $dateCreated = date("Y-m-d");
+  if (isset($_POST['update'])) {
 
-    $query=mysqli_query($conn,"UPDATE tblclassteacher set firstName='$firstName', lastName='$lastName',
-    emailAddress='$emailAddress',phoneNo='$phoneNo', classId='$classId'
-    where Id='$Id'");
-            if ($query) {
-                
-                echo "<script type = \"text/javascript\">
-                window.location = (\"createClassTeacher.php\")
-                </script>"; 
-            }
-            else
-            {
-                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>Erreur!</div>";
-            }
-        }
-    }
+      $firstName = trim($_POST['firstName']);
+      $lastName  = trim($_POST['lastName']);
+      $emailAddress = trim($_POST['emailAddress']);
+      $phoneNo = trim($_POST['phoneNo']);
+      $classId = $_POST['classId'];
 
+      $password = trim($_POST['password']);
+      $cpassword = trim($_POST['cpassword']);
 
+      // Flag pour savoir si on peut mettre à jour
+      $canUpdate = true;
+
+      // Vérification du mot de passe seulement si rempli
+      if (!empty($password)) {
+          if ($password !== $cpassword) {
+              $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>
+                  Les mots de passe ne correspondent pas !
+              </div>";
+              $canUpdate = false; // empêche la mise à jour
+          } else {
+              $md5Password = md5($password);
+          }
+      }
+
+      // Effectuer la mise à jour uniquement si $canUpdate = true
+      if ($canUpdate) {
+          if (!empty($password)) {
+              $query = mysqli_query($conn, "UPDATE tblclassteacher SET 
+                  firstName='$firstName',
+                  lastName='$lastName',
+                  emailAddress='$emailAddress',
+                  phoneNo='$phoneNo',
+                  classId='$classId',
+                  password='$md5Password'
+                  WHERE Id='$Id'");
+          } else {
+              $query = mysqli_query($conn, "UPDATE tblclassteacher SET 
+                  firstName='$firstName',
+                  lastName='$lastName',
+                  emailAddress='$emailAddress',
+                  phoneNo='$phoneNo',
+                  classId='$classId'
+                  WHERE Id='$Id'");
+          }
+
+          if ($query) {
+              $statusMsg = "<div class='alert alert-success' style='margin-right:700px;'>
+                  Le chef d'usine a été modifié avec succès !
+              </div>";
+          } else {
+              $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>
+                  Erreur lors de la mise à jour !
+              </div>";
+          }
+      }
+  }
+}
 //--------------------------------DELETE------------------------------------------------------------------
 
   if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "delete")
@@ -156,6 +200,7 @@ if(isset($_POST['save'])){
 
           <div class="row">
             <div class="col-lg-12">
+            
               <!-- Form Basic -->
               <div class="card mb-4">
                 <div class="card-body">
@@ -182,30 +227,34 @@ if(isset($_POST['save'])){
                         </div>
                         <div class="col-xl-4">
                         <label class="form-control-label">Mot de passe<span class="text-danger ml-2">*</span></label>
-                        <input type="password" class="form-control" required name="password" value="<?php echo $row['password'];?>" id="exampleInputFirstName" >
+                        <input type="password" class="form-control" required name="password"  id="exampleInputFirstName" >
                         </div>
                         <div class="col-xl-4">
                         <label class="form-control-label">Comfirmer le mot de passe<span class="text-danger ml-2">*</span></label>
-                        <input type="password" class="form-control" name="cpassword" value="<?php echo $row['cpassword'];?>" id="exampleInputFirstName" >
+                        <input type="password" class="form-control" name="cpassword"  id="exampleInputFirstName" >
                         </div>
                     </div>
                     <div class="form-group row mb-3">
-                        <div class="col-xl-4">
-                        <label class="form-control-label">Selectionner une usine<span class="text-danger ml-2">*</span></label>
-                         <?php
-                        $qry= "SELECT * FROM tblclass ORDER BY className ASC";
-                        $result = $conn->query($qry);
-                        $num = $result->num_rows;		
-                        if ($num > 0){
-                          echo ' <select required name="classId" onchange="classArmDropdown(this.value)" class="form-control mb-3">';
-                          echo'<option value="">--Usine--</option>';
-                          while ($rows = $result->fetch_assoc()){
-                          echo'<option value="'.$rows['Id'].'" >'.$rows['className'].'</option>';
-                              }
-                                  echo '</select>';
-                              }
-                            ?>  
-                        </div>
+    <div class="col-xl-4">
+    <label>Selectionner une usine<span class="text-danger ml-2">*</span></label>
+    <?php
+    // Récupération des classes
+    $qry= "SELECT * FROM tblclass ORDER BY className ASC";
+    $result = $conn->query($qry);
+
+    if ($result->num_rows > 0){
+        echo '<select required name="classId" class="form-control mb-3">';
+        echo '<option value="">--Usine--</option>';
+        while ($rowsClass = $result->fetch_assoc()){
+            // Si on est en édition, sélection de l’usine déjà attribuée
+            $selected = (isset($row['classId']) && $rowsClass['Id'] == $row['classId']) ? 'selected' : '';
+            echo '<option value="'.$rowsClass['Id'].'" '.$selected.'>'.$rowsClass['className'].'</option>';
+        }
+        echo '</select>';
+    }
+    ?>
+
+</div>
                      
                     </div>
                     <?php
@@ -229,6 +278,9 @@ if(isset($_POST['save'])){
                  <div class="row">
               <div class="col-lg-12">
                 <div class="table-responsive p-3">
+                <?php echo $statusMsg; ?>
+
+
                 <h1 class="h3 mb-0 text-gray-800">Tous les chefs et leurs usines assignées</h1>
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
@@ -238,8 +290,8 @@ if(isset($_POST['save'])){
                         <th>Email</th>
                         <th>Tel</th>
                         <th>Usine</th>
-                        <th>Editer</th>
-                        <th>Supprimer</th>
+                        <th><i class='fas fa-fw fa-edit'></i></th>
+                        <th><i class='fas fa-fw fa-trash'></i></th>
                       </tr>
                     </thead>
                    
@@ -279,6 +331,7 @@ if(isset($_POST['save'])){
                             </div>";
                       }
                       
+                      
                       ?>
                     </tbody>
                   </table>
@@ -290,6 +343,7 @@ if(isset($_POST['save'])){
          
 
         </div>
+                  
         <!---Container Fluid-->
       </div>
     </div>

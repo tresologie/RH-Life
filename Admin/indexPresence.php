@@ -2,6 +2,19 @@
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
+
+// Définir période du 28 au 28
+$today = date('Y-m-d');
+
+if(date('d') >= 28){
+    $fromDate = date('Y-m-28');
+    $toDate = date('Y-m-28', strtotime('+1 month'));
+} else {
+    $fromDate = date('Y-m-28', strtotime('-1 month'));
+    $toDate = date('Y-m-28');
+}
+
 // Récupérer toutes les classes qui ont au moins un étudiant et leur nom
 $queryClasses = mysqli_query($conn, "
     SELECT DISTINCT s.classId, c.className
@@ -33,6 +46,15 @@ $queryClasses = mysqli_query($conn, "
 
       <div class="d-sm-flex align-items-center justify-content-between mb-4" >
           <h1 class="h3 mb-0 text-gray-800">Statistiques de présences du <?php echo date("d-m-Y");?></h1>
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+              <a href="downloadPresences.php?fromDate=<?php echo $fromDate; ?>
+              &toDate=<?php echo $toDate; ?>"> Exporter</a>(Exel)</li>
+              <li class="breadcrumb-item">
+              <a href="printPresences.php?fromDate=<?php echo $fromDate; ?>
+              &toDate=<?php echo $toDate; ?>">Imprimer</a>(PDF)</li>
+              
+            </ol>
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="./">Accueil</a></li>
             <li class="breadcrumb-item active" aria-current="page">Tableau</li>

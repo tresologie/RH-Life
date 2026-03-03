@@ -4,6 +4,8 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +43,7 @@ include '../Includes/session.php';
 
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadUsines.php">Exporter</a>(Exel)</li>
-              <li class="breadcrumb-item"><a href="#">Imprimer</a>(PDF)</li>
+              <li class="breadcrumb-item"><a href="printUsines.php">Imprimer</a>(PDF)</li>
               
             </ol>
 

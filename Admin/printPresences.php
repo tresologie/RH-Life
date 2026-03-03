@@ -2,8 +2,12 @@
 include '../Includes/dbcon.php';
 require_once '../vendor/autoload.php'; // si installé via composer
 
+date_default_timezone_set('Africa/Bujumbura');
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
+
+
 
 if(isset($_GET['fromDate']) && isset($_GET['toDate'])){
     $fromDate = $_GET['fromDate'];
@@ -25,7 +29,7 @@ INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
 INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
 WHERE DATE(tblattendance.dateTimeTaken) 
 BETWEEN '$fromDate' AND '$toDate'
-ORDER BY tblstudents.firstName ASC";
+ORDER BY tblclass.className, tblstudents.firstName ASC";
 
 $rs = $conn->query($query);
 
@@ -57,7 +61,7 @@ body { font-family: Arial, sans-serif; font-size: 12px; }
 .header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .title { text-align: center; font-size: 16px; font-weight: bold; text-decoration: underline; }
 table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #000; padding: 5px; text-align: left; }
+th, td { border: 1px solid #000; padding: 3px; text-align: left; }
 th { background-color: #ccc; }
 tr:nth-child(even) { background-color: #f2f2f2; }
 </style>

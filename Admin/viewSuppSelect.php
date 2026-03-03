@@ -4,7 +4,7 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
-
+date_default_timezone_set('Africa/Bujumbura');
 
 ?>
 
@@ -149,7 +149,8 @@ include '../Includes/session.php';
                         FROM tblsupp
                         INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
                         INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
-                        where tblsupp.admissionNo = '$admissionNumber'  ";
+                        where tblsupp.admissionNo = '$admissionNumber'
+                        ORDER BY tblclass.className, tblstudents.firstName ASC";
 
                        }
                        if($type == "2"){ //Single Date Attendance
@@ -164,7 +165,7 @@ include '../Includes/session.php';
                        
                         INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
                         where tblsupp.dateTimeTaken = '$singleDate' and tblsupp.admissionNo = '$admissionNumber'
-                        ORDER BY tblstudents.firstName ASC ";
+                        ORDER BY tblclass.className, tblstudents.firstName ASC";
                         
 
                        }
@@ -180,7 +181,8 @@ include '../Includes/session.php';
                         INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
                         INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
                         where tblsupp.dateTimeTaken between '$fromDate' and '$toDate' 
-                        and tblsupp.admissionNo = '$admissionNumber'  ";
+                        and tblsupp.admissionNo = '$admissionNumber'  
+                        ORDER BY tblclass.className, tblstudents.firstName ASC";
                         
                        }
 

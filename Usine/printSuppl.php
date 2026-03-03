@@ -7,6 +7,7 @@ include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
 // Date du jour
+date_default_timezone_set('Africa/Bujumbura');
 $todaysDate = date("d-m-Y");
 $dateTaken = date("Y-m-d");
 

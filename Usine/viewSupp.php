@@ -4,6 +4,7 @@ include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
 // Date par défaut = aujourd'hui
+date_default_timezone_set('Africa/Bujumbura');
 $dateTaken = date('Y-m-d');
 $totalGeneral = 0;
 

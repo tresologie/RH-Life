@@ -4,6 +4,8 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
+
 $query = "SELECT tblclass.className
     FROM tblclassteacher
     INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
@@ -82,6 +84,7 @@ $query = "SELECT tblclass.className
                         <th>Badge</th>
                         <th>Usine</th>
                         <th>Poste</th>
+                        <th>No. de tel</th>
                         <th>Date</th>
                         
                       </tr>
@@ -91,10 +94,10 @@ $query = "SELECT tblclass.className
 
                   <?php
                       $query = "SELECT tblstudents.Id,tblclass.className,tblstudents.firstName,tblstudents.identite,
-                      tblstudents.lastName,tblstudents.admissionNumber,poste,tblstudents.dateCreated
+                      tblstudents.lastName,tblstudents.tel,tblstudents.admissionNumber,poste,tblstudents.dateCreated
                       FROM tblstudents
                       INNER JOIN tblclass ON tblclass.Id = tblstudents.classId 
-                      ORDER BY tblstudents.firstName ASC";
+                      ORDER BY tblclass.className, tblstudents.firstName ASC";
                       $rs = $conn->query($query);
                       $num = $rs->num_rows;
                       $sn=0;
@@ -111,7 +114,7 @@ $query = "SELECT tblclass.className
                                 <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['className']."</td>
                                 <td>".$rows['poste']."</td>
-                                
+                                <td>".$rows['tel']."</td>
                                 <td>".$rows['dateCreated']."</td>
                                
                               </tr>";

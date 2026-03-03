@@ -3,6 +3,8 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
+
 // ===== Dates par défaut (7 derniers jours) =====
 if(isset($_POST['view'])){
     $type = $_POST['type'];
@@ -42,7 +44,7 @@ FROM tblsupp
 INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
 INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
 WHERE tblsupp.dateTimeTaken BETWEEN '$fromDate' AND '$toDate'
-ORDER BY tblstudents.firstName ASC";
+ORDER BY tblclass.className, tblstudents.firstName ASC";
 
 $rs = $conn->query($query);
 
@@ -58,7 +60,8 @@ while($row = $rs->fetch_assoc()){
 
     $dates[$date] = $date;
 
-    $data[$emp]['name']  = $row['firstName'].' '.$row['lastName'].' '.$row['identite'];
+    $data[$emp]['name']  = $row['firstName'].' '.$row['lastName'];
+    $data[$emp]['identite']= $row['identite'];
     $data[$emp]['badge'] = $row['admissionNumber'];
     $data[$emp]['usine'] = $row['className'];
     $data[$emp]['poste'] = $row['poste'];
@@ -135,7 +138,7 @@ foreach($data as $emp => $info){
         <!-- Topbar -->
         
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Heures supplémentaires jusqu'à 7 jours</h1>
+            <h1 class="h3 mb-0 text-gray-800">Heures supplémentaires de cette semaine</h1>
 
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadSuppl.php?from=<?php echo $fromDate;?>
@@ -223,7 +226,7 @@ foreach($data as $emp => $info){
           $totalEmploye = 0;
 
           echo "<tr>";
-          echo "<td  >".$info['name']." ".$row['identite']."</td>";
+          echo "<td  ><b>".$info['name']." ".$row['identite']."</b></br>".$info['identite']."</td>";
           echo "<td>".$info['badge']."</td>";
           echo "<td>".$info['usine']."</td>";
           echo "<td>".$info['poste']."</td>";

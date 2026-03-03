@@ -4,16 +4,19 @@ include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
 
-    $query = "SELECT tblclass.className
-    FROM tblclassteacher
-    INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
-    Where tblclassteacher.Id = '$_SESSION[userId]'";
+ // Récupérer toutes les usines (classes) qui ont au moins un employé avec leur nom
+$queryClasses = mysqli_query($conn, "
+SELECT DISTINCT s.classId, c.className
+FROM tblstudents s
+INNER JOIN tblclass c ON s.classId = c.Id
+ORDER BY s.classId ASC
+");
 
-    $rs = $conn->query($query);
-    $num = $rs->num_rows;
-    $rrw = $rs->fetch_assoc();
 
-
+   // Date du jour
+   date_default_timezone_set('Africa/Bujumbura');
+   $todaysDate = date("d-m-Y");
+   $dateTaken = date("Y-m-d"); // pour les requêtes SQL
 ?>
 
 <!DOCTYPE html>
@@ -197,13 +200,14 @@ $absent = $students-$totAttendance;
 
             <!-- Std Att Card  -->
             <?php 
-            $result = mysqli_query($conn, "SELECT SUM(montant) AS total_montant 
-            FROM tblsupp 
-            WHERE DATE(dateTimeTaken) = CURDATE()");
-  
-            $row = mysqli_fetch_assoc($result);
-            $payer = $row['total_montant'];
-            $payer = floor($payer / 100) * 100;
+       
+              // Montant payé
+              $resultPayer = mysqli_query($conn,
+               "SELECT SUM(FLOOR(tblsupp.montant / 100) * 100) as total
+                 FROM tblsupp
+                 WHERE  tblsupp.dateTimeTaken = '$dateTaken' ");
+              $rowPayer = mysqli_fetch_assoc($resultPayer);
+              $payer = floor(($rowPayer['total'] ?? 0) / 100) * 100;
             ?>
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card h-100">
@@ -272,9 +276,8 @@ $absent = $students-$totAttendance;
               </div>
             </div>
 
-
         </div>
-
+            
         <!---Container Fluid-->
       </div>
     </div>

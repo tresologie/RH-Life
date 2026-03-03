@@ -4,7 +4,7 @@ error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
-
+date_default_timezone_set('Africa/Bujumbura');
 
 ?>
 
@@ -147,9 +147,9 @@ include '../Includes/session.php';
                         tblstudents.firstName,tblstudents.lastName,tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste
                         FROM tblattendance
                         INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
-                      
                         INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
-                        where tblattendance.admissionNo = '$admissionNumber' ";
+                        where tblattendance.admissionNo = '$admissionNumber' 
+                        ORDER BY tblclass.className, tblstudents.firstName ASC";
 
                        }
                        if($type == "2"){ //Single Date Attendance
@@ -162,7 +162,8 @@ include '../Includes/session.php';
                         INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
                        
                         INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
-                        where tblattendance.dateTimeTaken = '$singleDate' and tblattendance.admissionNo = '$admissionNumber' ";
+                        where tblattendance.dateTimeTaken = '$singleDate' and tblattendance.admissionNo = '$admissionNumber' 
+                        ORDER BY tblclass.className, tblstudents.firstName ASC";
                         
 
                        }
@@ -179,7 +180,7 @@ include '../Includes/session.php';
                         INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
                         where tblattendance.dateTimeTaken between '$fromDate' and '$toDate' 
                         and tblattendance.admissionNo = '$admissionNumber' 
-                        ORDER BY tblstudents.firstName ASC";
+                        ORDER BY tblclass.className, tblstudents.firstName ASC";
                         
                        }
 

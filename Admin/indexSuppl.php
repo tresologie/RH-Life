@@ -2,6 +2,8 @@
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
+
 // Récupérer toutes les usines (classes) qui ont au moins un employé avec leur nom
 $queryClasses = mysqli_query($conn, "
     SELECT DISTINCT s.classId, c.className
@@ -9,6 +11,34 @@ $queryClasses = mysqli_query($conn, "
     INNER JOIN tblclass c ON s.classId = c.Id
     ORDER BY s.classId ASC
 ");
+
+
+
+// ===== Dates par défaut (7 derniers jours) =====
+if(isset($_POST['view'])){
+  $type = $_POST['type'];
+
+  if($type == "2"){
+      $singleDate = $_POST['singleDate'];
+      $fromDate = $singleDate;
+      $toDate = $singleDate;
+  } elseif($type == "3"){
+      $fromDate = $_POST['fromDate'];
+      $toDate = $_POST['toDate'];
+      $diff = (strtotime($toDate) - strtotime($fromDate)) / (60*60*24) + 1;
+      if($diff > 7){
+          $toDate = date('Y-m-d', strtotime($fromDate. ' + 6 days'));
+      }
+  } else {
+      $toDate = date('Y-m-d');
+      $fromDate = date('Y-m-d', strtotime('-6 days'));
+  }
+} else {
+  // par défaut : 7 derniers jours
+  $toDate = date('Y-m-d');
+  $fromDate = date('Y-m-d', strtotime('-6 days'));
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +64,13 @@ $queryClasses = mysqli_query($conn, "
       <div class="d-sm-flex align-items-center justify-content-between mb-4">
           <h1 class="h3 mb-0 text-gray-800">Heures Supplémentaires du <?php echo date("d-m-Y");?></h1>
           <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="downloadSuppl.php?from=<?php echo $fromDate;?>
+              &to=<?php echo $toDate;?>" >Exporter</a>(Exel)</li>
+              <li class="breadcrumb-item"><a href="printSuppl.php?from=<?php echo $fromDate;?>
+              &to=<?php echo $toDate;?>" >Imprimer</a>(PDF)</li>
+              
+            </ol>
+          <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="./">Accueil</a></li>
             <li class="breadcrumb-item active" aria-current="page">Tableau</li>
           </ol>
@@ -41,21 +78,28 @@ $queryClasses = mysqli_query($conn, "
 
       <div class="container-fluid" id="container-wrapper">
         <div class="row mb-3">
-          <?php while ($class = mysqli_fetch_assoc($queryClasses)) {
+          <?php 
+          // Date du jour
+          $todaysDate = date("d-m-Y");
+          $dateTaken = date("Y-m-d"); // pour les requêtes SQL
+          
+          while ($class = mysqli_fetch_assoc($queryClasses)) {
               $classId = $class['classId'];
               $className = $class['className'];
 
               // Montant total prévu
-              $resultTotal = mysqli_query($conn,"SELECT SUM(salaire * 7 / 240) AS total_montant FROM tblstudents WHERE classId = '$classId'");
+              $resultTotal = mysqli_query($conn,"SELECT SUM(salaire * 7 / 240) AS total_montant 
+              FROM tblstudents WHERE classId = '$classId'");
               $rowTotal = mysqli_fetch_assoc($resultTotal);
               $total = floor(($rowTotal['total_montant'] ?? 0) / 100) * 100;
 
               // Montant payé
-              $resultPayer = mysqli_query($conn, "SELECT SUM(montant) AS total_payer 
-                                                  FROM tblsupp 
-                                                  WHERE classId = '$classId' AND DATE(dateTimeTaken) = CURDATE()");
+              $resultPayer = mysqli_query($conn,
+               "SELECT SUM(FLOOR(tblsupp.montant / 100) * 100) as total
+                 FROM tblsupp
+                 WHERE classId = '$classId' AND tblsupp.dateTimeTaken = '$dateTaken' ");
               $rowPayer = mysqli_fetch_assoc($resultPayer);
-              $payer = floor(($rowPayer['total_payer'] ?? 0) / 100) * 100;
+              $payer = floor(($rowPayer['total'] ?? 0) / 100) * 100;
 
               // À retourner
               $retour = $total - $payer;

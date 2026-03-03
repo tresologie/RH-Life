@@ -2,6 +2,8 @@
 require '../vendor/autoload.php'; 
 include '../Includes/dbcon.php';
 
+date_default_timezone_set('Africa/Bujumbura');
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -29,7 +31,7 @@ FROM tblsupp
 INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
 INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
 WHERE tblsupp.dateTimeTaken BETWEEN '$fromDate' AND '$toDate'
-ORDER BY tblstudents.firstName ASC";
+ORDER BY tblclass.className, tblstudents.firstName ASC";
 
 $result = $conn->query($query);
 
@@ -71,7 +73,7 @@ tr:nth-child(even) { background-color: #f2f2f2; }
 <div class="header">
 <div> Life campony </div>
 <div>Le '.date("d-m-Y").'</div>
-<div class="title">Heures supplementaires de cette semaine</div>
+<div class="title">Heures supplementaires du '.$fromDate.' au '.$toDate.'</div>
 </div>
 <table>
 <thead>
@@ -86,7 +88,8 @@ tr:nth-child(even) { background-color: #f2f2f2; }
 foreach($dates as $date){
     $html .= '<th>'.date("d/m", strtotime($date)).'</th>';
 }
-$html .= '<th>Total</th></tr></thead><tbody>';
+$html .= '<th>Total</th>';
+$html .= '<th>Signature</th></tr></thead><tbody>';
 
 // ===== Lignes par employé =====
 $totalGeneral = 0;
@@ -108,7 +111,7 @@ foreach($data as $emp => $info){
     }
 
     $html .= '<td><b>'.number_format($totalEmp,0,',',' ').' Fbu</b></td>';
-    $html .= '</tr>';
+    $html .= '<td></td></tr>';
 
     $totalGeneral += $totalEmp;
     $cnt++;
@@ -118,6 +121,7 @@ foreach($data as $emp => $info){
 $html .= '<tr>
 <td colspan="'.(6+count($dates)).'" style="text-align:right;font-weight:bold;">TOTAL GENERAL</td>
 <td style="font-weight:bold;">'.number_format($totalGeneral,0,',',' ').' Fbu</td>
+<td></td>
 </tr>';
 
 $html .= '</tbody></table>';

@@ -3,7 +3,7 @@
 error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
-
+date_default_timezone_set('Africa/Bujumbura');
 
 $query = "SELECT tblclass.className
 FROM tblclassteacher

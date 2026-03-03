@@ -2,6 +2,7 @@
 include '../Includes/dbcon.php';
 
 // ===== Définir la période par défaut =====
+date_default_timezone_set('Africa/Bujumbura');
 $toDate   = date('Y-m-d');                  // aujourd'hui
 $fromDate = date('Y-m-d', strtotime('-6 days')); // 7 derniers jours
 
@@ -38,7 +39,7 @@ INNER JOIN tblclass ON tblclass.Id = tblsupp.classId
 INNER JOIN tblstudents ON tblstudents.admissionNumber = tblsupp.admissionNo
 WHERE DATE(tblsupp.dateTimeTaken) 
 BETWEEN '$fromDate' AND '$toDate'
-ORDER BY tblstudents.firstName ASC";
+ORDER BY tblclass.className, tblstudents.firstName ASC";
 
 $rs = $conn->query($query);
 
@@ -99,6 +100,7 @@ foreach($dates as $date){
 }
 
 echo "<th>TOTAL</th>";
+echo "<th>Signature</th>";
 echo "</tr>";
 
 // ===== Lignes par employé =====
@@ -120,6 +122,7 @@ foreach($data as $emp => $info){
     }
 
     echo "<td ><b>".number_format($totalEmp,0,',',' ')." Fbu</b></td>";
+    echo "<td></td>";
     echo "</tr>";
 
     $totalGeneral += $totalEmp;

@@ -1,9 +1,10 @@
 
 <?php 
-error_reporting(0);
+error_reporting(E_ALL);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
 //------------------------SAVE--------------------------------------------------
 
 if(isset($_POST['save'])){
@@ -11,6 +12,9 @@ if(isset($_POST['save'])){
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $lastName = mysqli_real_escape_string($conn, $_POST['lastName']);
     $identite = mysqli_real_escape_string($conn, $_POST['identite']);
+    $ddn = mysqli_real_escape_string($conn, $_POST['ddn']);
+    $tel = mysqli_real_escape_string($conn, $_POST['tel']);
+    $genre = mysqli_real_escape_string($conn, $_POST['genre']);
     $admissionNumber = mysqli_real_escape_string($conn, $_POST['admissionNumber']);
     $poste = mysqli_real_escape_string($conn, $_POST['poste']);
     $salaire = mysqli_real_escape_string($conn, $_POST['salaire']);
@@ -30,11 +34,10 @@ if(isset($_POST['save'])){
     }
     else{
 
-        $insert = mysqli_query($conn, "INSERT INTO tblstudents
-        (firstName,lastName,identite,admissionNumber,poste,salaire,password,classId,dateCreated)
-        VALUES
-        ('$firstName','$lastName','$identite','$admissionNumber','$poste','$salaire','12345','$classId','$dateCreated')");
-
+      $insert = mysqli_query($conn, "INSERT INTO tblstudents
+      (firstName,lastName,identite,poste,admissionNumber,tel,salaire,ddn,genre,classId,dateCreated)
+      VALUES
+      ('$firstName','$lastName','$identite','$poste','$admissionNumber','$tel','$salaire','$ddn','$genre','$classId','$dateCreated')");
         if($insert){
 
             $statusMsg = "<div class='alert alert-success' style='margin-right:700px;'>
@@ -67,15 +70,19 @@ if(isset($_POST['save'])){
              $lastName=$_POST['lastName'];
              $identite=$_POST['identite'];
              $admissionNumber=$_POST['admissionNumber'];
+             $ddn=$_POST['ddn'];
+             $tel=$_POST['tel'];
+             $genre=$_POST['genre'];
              $poste=$_POST['poste'];
              $salaire=$_POST['salaire'];
              $classId=$_POST['classId'];
 
              $dateCreated = date("Y-m-d");
 
-           $query=mysqli_query($conn,"UPDATE tblstudents set firstName='$firstName', lastName='$lastName',
-            identite='$identite', admissionNumber='$admissionNumber', poste='$poste', salaire='$salaire', classId='$classId'
-            where Id='$Id'");
+             $query=mysqli_query($conn,"UPDATE tblstudents SET firstName='$firstName', lastName='$lastName', 
+             identite='$identite',poste='$poste',admissionNumber='$admissionNumber',tel='$tel', 
+             salaire='$salaire', ddn='$ddn',genre='$genre',classId='$classId'
+             WHERE Id='$Id'");
             if ($query) { 
                 echo "<script type = \"text/javascript\">
                 window.location = (\"createStudents.php\")
@@ -163,6 +170,22 @@ if(isset($_POST['save'])){
               <!-- Form Basic -->
              
               <div class="card mb-4" style='padding:20px;'>
+              <?php
+if(!isset($row)){
+    $row = [
+        'firstName'=>'',
+        'lastName'=>'',
+        'identite'=>'',
+        'poste'=>'',
+        'admissionNumber'=>'',
+        'tel'=>'',
+        'salaire'=>'',
+        'ddn'=>'',
+        'genre'=>'',
+        'classId'=>''
+    ];
+}
+?>
                   <form method="post">
                    <div class="form-group row mb-3">
                         <div class="col-xl-4">
@@ -180,31 +203,45 @@ if(isset($_POST['save'])){
                     </div>
                     <div class="form-group row mb-3">
                         <div class="col-xl-4">
-                        <label class="form-control-label">Date de naissance<span class="text-danger ml-2">*</span></label>
-                        <input type="text" class="form-control" name="firstName" value="<?php echo $row['firstName'];?>" id="exampleInputFirstName" >
-                        </div>
-                        <div class="col-xl-4">
-                        <label class="form-control-label">Telephone<span class="text-danger ml-2">*</span></label>
-                        <input type="text" class="form-control" name="lastName" value="<?php echo $row['lastName'];?>" id="exampleInputFirstName" >
-                        </div>
-                        <div class="col-xl-4">
-                        <label class="form-control-label">Genre<span class="text-danger ml-2">*</span></label>
-                        <input type="text" class="form-control" name="identite" value="<?php echo $row['identite'];?>" id="exampleInputFirstName" >
-                        </div>
-                    </div>
-                     <div class="form-group row mb-3">
-                        <div class="col-xl-4">
-                        <label class="form-control-label">Numéro de la badge<span class="text-danger ml-2">*</span></label>
-                        <input type="text" class="form-control" required name="admissionNumber" value="<?php echo $row['admissionNumber'];?>" id="exampleInputFirstName" >
-                        </div>
-                        <div class="col-xl-4">
+                        
                         <label class="form-control-label">Poste<span class="text-danger ml-2">*</span></label>
                       <input type="text" class="form-control" required name="poste" value="<?php echo $row['poste'];?>" id="exampleInputFirstName" >
                       </div>
                       <div class="col-xl-4">
+                        <label class="form-control-label">Numéro de la badge<span class="text-danger ml-2">*</span></label>
+                        <input type="text" class="form-control" required name="admissionNumber" value="<?php echo $row['admissionNumber'];?>" id="exampleInputFirstName" >
+                        </div>
+                        <div class="col-xl-4">
+                        <label class="form-control-label">Telephone<span class="text-danger ml-2">*</span></label>
+                        <input type="text" class="form-control" name="tel" value="<?php echo $row['tel'];?>" id="exampleInputFirstName" >
+                        </div>
+                    </div>
+                     <div class="form-group row mb-3">
+                      <div class="col-xl-4">
                       <label class="form-control-label">Salaire<span class="text-danger ml-2">*</span></label>
                       <input type="number" class="form-control" required name="salaire" value="<?php echo $row['salaire'];?>" id="exampleInputFirstName" >
-                        </div>
+                      </div>
+                      <div class="col-xl-4">
+                      <label class="form-control-label">Date de naissance<span class="text-danger ml-2">*</span></label>
+                      <input type="date" class="form-control" name="ddn" value="<?php echo $row['ddn'];?>" id="exampleInputFirstName" >
+                      </div>
+
+                      <div class="col-xl-4">
+                      <label class="form-control-label d-block"> Genre <span class="text-danger ml-2">*</span></label>
+                      <div class="d-flex justify-content-around align-items-center">
+                      <div class="form-check">
+                      <input class="form-control" type="radio" name="genre" value="M"
+                      <?php if($row['genre'] == 'M') echo 'checked'; ?>>
+                      <label class="form-check-label">Masculin</label>
+                      </div>
+                      <div class="form-check">
+                      <input class="form-control" type="radio" name="genre" value="F"
+                      <?php if($row['genre'] == 'F') echo 'checked'; ?>>
+                      <label class="form-check-label">Féminin</label>
+                     </div>
+
+                       </div>
+                     </div>
                     </div>
                     <div class="form-group row mb-3">
                         <div class="col-xl-4">
@@ -217,8 +254,9 @@ if(isset($_POST['save'])){
                           echo ' <select required name="classId" onchange="classArmDropdown(this.value)" class="form-control mb-3">';
                           echo'<option value="">--Usine--</option>';
                           while ($rows = $result->fetch_assoc()){
-                          echo'<option value="'.$rows['Id'].'" >'.$rows['className'].'</option>';
-                              }
+                            $selected = (isset($row['classId']) && $row['classId'] == $rows['Id']) ? "selected" : "";
+                            echo '<option value="'.$rows['Id'].'" '.$selected.'>'.$rows['className'].'</option>';
+                        }
                                   echo '</select>';
                               }
                             ?>  
@@ -251,8 +289,9 @@ if(isset($_POST['save'])){
                       <tr>
                         <th>#</th>
                         <th>Nom & Prenom</th>
-                        <th>Badge</th>
                         <th>Poste</th>
+                        <th>Badge</th>
+                        <th>No. de tel</th>
                         <th>Salaire</th>
                         <th>Usine</th>
                         <th>Date</th>
@@ -264,12 +303,12 @@ if(isset($_POST['save'])){
                     <tbody>
 
                   <?php
-                      $query = "SELECT tblstudents.Id,tblclass.className,tblstudents.firstName,
-                      tblstudents.lastName,tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste,
+                      $query = "SELECT tblstudents.Id,tblclass.className,tblstudents.firstName,tblstudents.lastName,
+                      tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste,tblstudents.tel,
                       tblstudents.salaire,tblstudents.dateCreated
                       FROM tblstudents
                       INNER JOIN tblclass ON tblclass.Id = tblstudents.classId 
-                      ORDER BY tblstudents.firstName ASC";
+                      ORDER BY tblclass.className, tblstudents.firstName ASC";
                       $rs = $conn->query($query);
                       $num = $rs->num_rows;
                       $sn=0;
@@ -283,8 +322,9 @@ if(isset($_POST['save'])){
                               <tr>
                                 <td>".$sn."</td>
                                 <td><b>".$rows['firstName']." ".$rows['lastName']."</b> </br> ".$rows['identite']."</td>
-                                <td>".$rows['admissionNumber']."</td>
                                 <td>".$rows['poste']."</td>
+                                <td>".$rows['admissionNumber']."</td>
+                                <td>".$rows['tel']."</td>
                                 <td>".$rows['salaire']." Fbu</td>
                                 <td>".$rows['className']."</td>
                                  <td>".$rows['dateCreated']."</td>

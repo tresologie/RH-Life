@@ -1,0 +1,95 @@
+<?php
+error_reporting(0);
+include '../Includes/dbcon.php';
+include '../Includes/session.php';
+require_once '../vendor/autoload.php';
+
+use Dompdf\Dompdf;
+
+date_default_timezone_set('Africa/Bujumbura');
+
+$todaysDate = date("d-m-Y");
+$filename = "Liste_chefs_usines.pdf";
+
+// Récupérer tous les chefs et leurs usines
+$ret = mysqli_query($conn,"SELECT t.Id, t.dateCreated, c.className, 
+    t.firstName, t.lastName, t.emailAddress, t.phoneNo
+    FROM tblclassteacher t
+    INNER JOIN tblclass c ON c.Id = t.classId
+    ORDER BY c.className, t.firstName ASC");
+
+// Construire le HTML
+$html = '<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { font-family: Arial, sans-serif; font-size: 12px; }
+table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+th, td { border: 1px solid #000; padding: 5px; text-align: left; }
+th { background-color: #ccc; }
+.title { text-align: center; font-size: 16px; font-weight: bold; text-decoration: underline; margin-top: 10px; }
+.header-table td { border: none; }
+</style>
+</head>
+<body>';
+
+// En-tête
+$html .= '
+<table class="header-table">
+<tr>
+    <td><strong>Life Company</strong></td>
+    <td style="text-align:right;">Le '.$todaysDate.'</td>
+</tr>
+</table>
+
+<div class="title">Liste de tous les usines et chefs de Life Company</div>
+';
+
+// Tableau principal
+$html .= '
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Nom & Prénom</th>
+<th>Email</th>
+<th>Téléphone</th>
+<th>Usine</th>
+<th>Date Création</th>
+</tr>
+</thead>
+<tbody>
+';
+
+$cnt = 1;
+
+if(mysqli_num_rows($ret) > 0){
+    while ($row = mysqli_fetch_assoc($ret)) {
+        $html .= '<tr>
+        <td>'.$cnt.'</td>
+        <td>'.$row['firstName'].' '.$row['lastName'].'</td>
+        <td>'.$row['emailAddress'].'</td>
+        <td>'.$row['phoneNo'].'</td>
+        <td>'.$row['className'].'</td>
+        <td>'.$row['dateCreated'].'</td>
+        </tr>';
+        $cnt++;
+    }
+} else {
+    $html .= '<tr>
+    <td colspan="6" style="text-align:center;">Aucun chef ou usine trouvé</td>
+    </tr>';
+}
+
+$html .= '</tbody></table></body></html>';
+
+// Générer le PDF
+$dompdf = new Dompdf();
+$dompdf->setPaper('A4', 'portrait');
+$dompdf->loadHtml($html);
+$dompdf->render();
+
+// Télécharger
+$dompdf->stream($filename, array("Attachment" => true));
+exit();
+?>

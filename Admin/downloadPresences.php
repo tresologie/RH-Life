@@ -1,5 +1,8 @@
 <?php
 include '../Includes/dbcon.php';
+include '../Includes/session.php';
+
+date_default_timezone_set('Africa/Bujumbura');
 
 if(isset($_GET['fromDate']) && isset($_GET['toDate'])){
     $fromDate = $_GET['fromDate'];
@@ -28,7 +31,7 @@ INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
 INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
 WHERE DATE(tblattendance.dateTimeTaken) 
 BETWEEN '$fromDate' AND '$toDate'
-ORDER BY tblstudents.firstName ASC";
+ORDER BY tblclass.className, tblstudents.firstName ASC";
 
 $rs = $conn->query($query);
 

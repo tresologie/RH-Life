@@ -1,40 +1,23 @@
-<?php 
+<?php
 error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
-date_default_timezone_set('Africa/Bujumbura');
-$dateToday = date("Y-m-d");
-$timeNow = date("H:i:s"); // heure actuelle
-
-// ------------------- BLOQUER LA PAGE SI +30 MIN -------------------
-$q = mysqli_query($conn,"SELECT MIN(timeTaken) AS startTime 
-                         FROM tblattendance 
-                         WHERE classId='$_SESSION[classId]' 
-                           AND dateTimeTaken='$dateToday'");
-$row = mysqli_fetch_assoc($q);
-
-if($row['startTime']){
-    $appelStartTime = $row['startTime'];
-    $appelEndTime = date("H:i:s", strtotime($appelStartTime . ' +30 minutes'));
-
-    if(strtotime($timeNow) > strtotime($appelEndTime)){
-        echo "<div class='alert alert-danger text-center' style='margin:50px; font-size:40px;'>
-                L'appel est déjà terminé !</div>";
-        exit(); // bloque le reste de la page
-    }
-}
-// -------------------------------------------------------------------
-
-// Récupérer le nom de l'usine du professeur
 $query = "SELECT tblclass.className
-          FROM tblclassteacher
-          INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
-          WHERE tblclassteacher.Id = '$_SESSION[userId]'";
+FROM tblclassteacher
+INNER JOIN tblclass ON tblclass.Id = tblclassteacher.classId
+
+Where tblclassteacher.Id = '$_SESSION[userId]'";
 $rs = $conn->query($query);
+$num = $rs->num_rows;
 $rrw = $rs->fetch_assoc();
 
-// -------------------- UPDATE PRESENCES --------------------
+date_default_timezone_set('Africa/Bujumbura');
+$dateToday = date("Y-m-d");
+$timeNow = date("H:i:s");
+
+// ------------------- UPDATE PRESENCES --------------------
+$statusMsg = "";
 if(isset($_POST['save'])){
     $admissionNo = $_POST['admissionNo'];
     $check = isset($_POST['check']) ? $_POST['check'] : [];
@@ -50,9 +33,34 @@ if(isset($_POST['save'])){
                             AND dateTimeTaken='$dateToday'");
     }
 
-    $statusMsg = "<div class='alert alert-success' style='margin-right:700px;'>
+    $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;'>
     Présences mises à jour avec succès !</div>";
+    
 }
+
+// ------------------- BLOQUER L'APPEL SI +45 MIN -------------------
+$appelBloque = false;
+$messageBlocage = "";
+
+$q = mysqli_query($conn,"SELECT MIN(timeTaken) AS startTime 
+                         FROM tblattendance 
+                         WHERE classId='$_SESSION[classId]' 
+                         AND dateTimeTaken='$dateToday'");
+$row = mysqli_fetch_assoc($q);
+
+if($row['startTime']){
+    $appelStartTime = $row['startTime'];
+    $appelEndTime = date("H:i:s", strtotime($appelStartTime . ' +45 minutes'));
+
+    if(strtotime($timeNow) > strtotime($appelEndTime)){
+        $appelBloque = true;
+        $messageBlocage = "
+        <div class='alert alert-danger text-center' style='margin:20px; font-size:18px;'>
+            L'appel est déjà terminé !
+        </div>";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -99,11 +107,16 @@ if(isset($_POST['save'])){
               <form method="post">
                 <div class="card mb-4">
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Tous les employés de (<?php echo $rrw['className']; ?>)</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Tous les employés de <b><?php echo $rrw['className'];?></b></h6>
                     <h6 class="m-0 font-weight-bold text-danger"><i>Note : Cochez la case pour marquer la présence ou décochez pour l'absence</i></h6>
                   </div>
                   <div class="table-responsive p-3">
-                    <?php echo isset($statusMsg) ? $statusMsg : ""; ?>
+                  <?php echo $statusMsg; ?>
+                  <?php
+                if($appelBloque){
+                    echo $messageBlocage;
+                } else {
+                ?>
                     <table class="table align-items-center table-flush table-hover">
                       <thead class="thead-light">
                         <tr>
@@ -112,49 +125,58 @@ if(isset($_POST['save'])){
                           <th>Prénom</th>
                           <th>Badge</th>
                           <th>Poste</th>
-                          <th>Usine</th>
                           <th>Cocher</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
-                        $query = "SELECT tblstudents.Id, tblstudents.admissionNumber, tblclass.className, tblstudents.firstName,
-                                  tblstudents.lastName, tblstudents.poste
-                                  FROM tblstudents
-                                  INNER JOIN tblclass ON tblclass.Id = tblstudents.classId
-                                  WHERE tblstudents.classId='$_SESSION[classId]'
-                                  ORDER BY tblstudents.firstName ASC ";
+                        $classId = $_SESSION['classId'];
+
+                        $query = "SELECT s.Id, s.admissionNumber, c.className, 
+                                         s.firstName, s.lastName, s.poste,
+                                         a.status
+                                  FROM tblstudents s
+                                  INNER JOIN tblclass c ON c.Id = s.classId
+                                  LEFT JOIN tblattendance a 
+                                       ON a.admissionNo = s.admissionNumber
+                                       AND a.classId = s.classId
+                                       AND a.dateTimeTaken = '$dateToday'
+                                  WHERE s.classId='$classId'
+                                  ORDER BY s.firstName ASC";
+                        
                         $rs = $conn->query($query);
                         $sn = 0;
-
+                        
                         while($rows = $rs->fetch_assoc()){
                             $sn++;
-
-                            // Vérifier le status actuel
-                            $attQuery = mysqli_query($conn,"SELECT status FROM tblattendance 
-                                                            WHERE admissionNo='".$rows['admissionNumber']."' 
-                                                            AND classId='".$_SESSION['classId']."' 
-                                                            AND dateTimeTaken='$dateToday'");
-                            $attRow = mysqli_fetch_assoc($attQuery);
-                            $checked = (isset($attRow['status']) && $attRow['status']==1) ? "checked" : "";
-
+                            $checked = ($rows['status'] == 1) ? "checked" : "";
+                        
                             echo "<tr>
                                     <td>".$sn."</td>
                                     <td>".$rows['firstName']."</td>
                                     <td>".$rows['lastName']."</td>
                                     <td>".$rows['admissionNumber']."</td>
                                     <td>".$rows['poste']."</td>
-                                    <td>".$rows['className']."</td>
-                                    <td><input name='check[]' type='checkbox' value='".$rows['admissionNumber']."' class='form-control' $checked></td>
-                                  </tr>";
-                            echo "<input name='admissionNo[]' value='".$rows['admissionNumber']."' type='hidden' class='form-control'>";
+                                  
+                                    <td><input name='check[]' type='checkbox' value=".$rows['admissionNumber']." class='form-control'></td>
+                              </tr>";
+                              echo "<input name='admissionNo[]' value=".$rows['admissionNumber']." type='hidden' class='form-control'>";
+                          
+                        
+                            echo "<input name='admissionNo[]' 
+                                  value='".$rows['admissionNumber']."' 
+                                  type='hidden'>";
                         }
                         ?>
+                        
                       </tbody>
                     </table>
+                    
                     <br>
                     <button type="submit" name="save" class="btn btn-primary">Refaire</button>
+                    <?php } ?>
                   </div>
+                  
                 </div>
               </form>
             </div>

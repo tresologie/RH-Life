@@ -42,7 +42,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePage" aria-expanded="true"
           aria-controls="collapsePage">
-          <i class="fas fa-wallet"  style="color: blue;"></i>
+          <i class="fas fa-clock fa-2x"  style="color: blue;"></i>
           <span>Heures supplémentaires</span>
         </a>
         <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">

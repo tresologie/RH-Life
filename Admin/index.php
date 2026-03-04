@@ -1,299 +1,246 @@
-
 <?php 
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
 
+date_default_timezone_set('Africa/Bujumbura');
 
- // Récupérer toutes les usines (classes) qui ont au moins un employé avec leur nom
-$queryClasses = mysqli_query($conn, "
-SELECT DISTINCT s.classId, c.className
-FROM tblstudents s
-INNER JOIN tblclass c ON s.classId = c.Id
-ORDER BY s.classId ASC
+$todaysDate = date("d-m-Y");
+$dateSQL    = date("Y-m-d");
+
+// ===================== STATISTIQUES EMPLOYÉS (1 SEULE REQUÊTE) =====================
+$statsQuery = mysqli_query($conn,"
+SELECT 
+    COUNT(*) as total,
+    SUM(CASE WHEN genre='M' THEN 1 ELSE 0 END) as hommes,
+    SUM(CASE WHEN genre='F' THEN 1 ELSE 0 END) as femmes
+FROM tblstudents
 ");
 
+$stats = mysqli_fetch_assoc($statsQuery);
 
-   // Date du jour
-   date_default_timezone_set('Africa/Bujumbura');
-   $todaysDate = date("d-m-Y");
-   $dateTaken = date("Y-m-d"); // pour les requêtes SQL
+$students = $stats['total'] ?? 0;
+$hommes   = $stats['hommes'] ?? 0;
+$femmes   = $stats['femmes'] ?? 0;
+
+// ===================== ABANDONS =====================
+$abandonQuery = mysqli_query($conn,"
+SELECT admissionNo
+FROM tblattendance
+WHERE status='0'
+GROUP BY admissionNo
+HAVING COUNT(*) >= 5
+");
+
+$abandon = mysqli_num_rows($abandonQuery);
+
+// ===================== PRÉSENCE DU JOUR =====================
+$presenceQuery = mysqli_query($conn,"
+SELECT COUNT(*) as total 
+FROM tblattendance 
+WHERE status='1' 
+AND DATE(dateTimeTaken)='$dateSQL'
+");
+
+$rowPresence = mysqli_fetch_assoc($presenceQuery);
+$totAttendance = $rowPresence['total'] ?? 0;
+
+$absent = $students - $totAttendance;
+
+// ===================== MONTANT À PAYER =====================
+$payerQuery = mysqli_query($conn,"
+SELECT SUM(FLOOR(montant/100)*100) as total
+FROM tblsupp
+WHERE DATE(dateTimeTaken)='$dateSQL'
+");
+
+$rowPayer = mysqli_fetch_assoc($payerQuery);
+$payer = $rowPayer['total'] ?? 0;
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="img/logo/life.jpg" rel="icon">
   <title>Tableau de bord</title>
-  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
-  <div id="wrapper">
-    <!-- Sidebar -->
-   <?php include "Includes/sidebar.php";?>
-    <!-- Sidebar -->
-    <div id="content-wrapper" class="d-flex flex-column">
-      <div id="content">
-        <!-- TopBar -->
-           <?php include "Includes/topbar.php";?>
-        <!-- Topbar -->
+<div id="wrapper">
 
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Statistique du <?php echo $todaysDate = date("d-m-Y");?></h1>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="./">Accueil</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Tableau</li>
-            </ol>
-          </div>
+<?php include "Includes/sidebar.php";?>
 
+<div id="content-wrapper" class="d-flex flex-column">
+<div id="content">
 
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
-       
-          <div class="row mb-3">
-          <!-- Students Card -->
-          <?php 
-$query1=mysqli_query($conn,"SELECT * from tblstudents");                       
-$students = mysqli_num_rows($query1);
-?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Tous les Employés</div>
-                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $students;?></div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-            
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-users fa-2x" style="color: blue;"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<?php include "Includes/topbar.php";?>
 
+<div class="container-fluid" id="container-wrapper">
 
-            <!-- Std Att Card  -->
-            <?php 
-$query1=mysqli_query($conn,"SELECT * from tblattendance where status = '1' and DATE(dateTimeTaken) = CURDATE()");                       
-$totAttendance = mysqli_num_rows($query1);
-?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Présents</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totAttendance;?></div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                        <!-- <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
-                        <span>Since yesterday</span> -->
-                      </div>  
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-calendar-check fa-2x text-success"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<hr class="sidebar-divider">
 
+<div class="row mb-3">
 
+<!-- Tous les employés -->
+<div class="col-xl-3 col-md-6 mb-4">
+<div class="card h-100">
+<div class="card-body">
+<div class="row no-gutters align-items-center">
+<div class="col mr-2">
+<div class="text-xs font-weight-bold text-uppercase mb-1">Tous les Employés</div>
+<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $students; ?></div>
+</div>
+<div class="col-auto">
+<i class="fas fa-users fa-2x" style="color: blue;"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-            <!-- Std Att Card  -->
-            <?php 
-                    
-$absent = $students-$totAttendance;
-?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Absents</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $absent ;?></div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                        <!-- <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
-                        <span>Since yesterday</span> -->
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-user-times fa-2x text-secondary"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Class Arm Card -->
+<!-- Hommes -->
+<div class="col-xl-3 col-md-6 mb-4">
+<div class="card h-100">
+<div class="card-body">
+<div class="row no-gutters align-items-center">
+<div class="col mr-2">
+<div class="text-xs font-weight-bold text-uppercase mb-1">Les hommes</div>
+<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $hommes; ?></div>
+</div>
+<div class="col-auto">
+<i class="fas fa-male fa-2x"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-            
+<!-- Femmes -->
+<div class="col-xl-3 col-md-6 mb-4">
+<div class="card h-100">
+<div class="card-body">
+<div class="row no-gutters align-items-center">
+<div class="col mr-2">
+<div class="text-xs font-weight-bold text-uppercase mb-1">Les femmes</div>
+<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $femmes; ?></div>
+</div>
+<div class="col-auto">
+<i class="fas fa-female fa-2x"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
 
+<!-- Abandons -->
+<div class="col-xl-3 col-md-6 mb-4">
+<div class="card h-100">
+<div class="card-body">
+<div class="row no-gutters align-items-center">
+<div class="col mr-2">
+<div class="text-xs font-weight-bold text-uppercase mb-1">Abandons</div>
+<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $abandon; ?></div>
+</div>
+<div class="col-auto">
+<i class="fa fa-cut fa-2x" style="color: red;"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-            <!-- Std Att Card  -->
-            <?php 
-            $query2 = mysqli_query($conn, "SELECT admissionNo, COUNT(*) FROM tblattendance WHERE status = '0'
-            GROUP BY admissionNo HAVING COUNT(*) >= 5 ");    
-                             
-            $abandon = mysqli_num_rows($query2);
-            ?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Abandons</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $abandon ;?></div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                    <i class="fa fa-cut fa-2x" style="color: red;"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          
-        
+</div>
 
-        </div>
-          <div class="row mb-3">
-          <!-- New User Card Example -->
-          <?php 
-         $querySum = mysqli_query($conn, "SELECT SUM(salaire * 7 / 240) AS montant
-          FROM tblstudents" );
-     $row = mysqli_fetch_assoc($querySum);
-     $total = $row['montant'];
-     $total = floor($total / 100) * 100;
-     
+<hr class="sidebar-divider">
 
-          ?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Montant prévu des heures Supplémentaires</div>
-                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo number_format($total, 0, ',', ' ')?>Fbu</div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                    <i class="fas fa-money-bill fa-2x" style="color: blue;"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div class="row mb-3">
 
+<!-- Montant à payer -->
+<div class="col-xl-3 col-md-6 mb-4">
+<div class="card h-100">
+<div class="card-body">
+<div class="row no-gutters align-items-center">
+<div class="col mr-2">
+<div class="text-xs font-weight-bold text-uppercase mb-1">A payer</div>
+<div class="h5 mb-0 font-weight-bold text-gray-800">
+<?php echo number_format($payer,0,',',' '); ?> Fbu
+</div>
+</div>
+<div class="col-auto">
+<i class="fas fa-money-bill fa-2x" style="color: blue;"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-            <!-- Std Att Card  -->
-            <?php 
-       
-              // Montant payé
-              $resultPayer = mysqli_query($conn,
-               "SELECT SUM(FLOOR(tblsupp.montant / 100) * 100) as total
-                 FROM tblsupp
-                 WHERE  tblsupp.dateTimeTaken = '$dateTaken' ");
-              $rowPayer = mysqli_fetch_assoc($resultPayer);
-              $payer = floor(($rowPayer['total'] ?? 0) / 100) * 100;
-            ?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">A payer</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo number_format($payer, 0, ',', ' ')?>Fbu</div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-money-bill-wave fa-2x text-success"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<!-- Présents -->
+<div class="col-xl-3 col-md-6 mb-4">
+<div class="card h-100">
+<div class="card-body">
+<div class="row no-gutters align-items-center">
+<div class="col mr-2">
+<div class="text-xs font-weight-bold text-uppercase mb-1">Présents</div>
+<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totAttendance; ?></div>
+</div>
+<div class="col-auto">
+<i class="fas fa-calendar-check fa-2x text-success"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
 
+<!-- Absents -->
+<div class="col-xl-3 col-md-6 mb-4">
+<div class="card h-100">
+<div class="card-body">
+<div class="row no-gutters align-items-center">
+<div class="col mr-2">
+<div class="text-xs font-weight-bold text-uppercase mb-1">Absents</div>
+<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $absent; ?></div>
+</div>
+<div class="col-auto">
+<i class="fas fa-user-times fa-2x text-secondary"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-             <!-- Std Att Card  -->
-             <?php 
-           $retour=$total-$payer;
-           
-            ?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">A retourner</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo number_format($retour, 0, ',', ' ')?>Fbu</div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-money-bill-wave fa-2x text-secondary"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<!-- Placeholder -->
+<div class="col-xl-3 col-md-6 mb-4">
+<div class="card h-100">
+<div class="card-body">
+<div class="row no-gutters align-items-center">
+<div class="col mr-2">
+<div class="text-xs font-weight-bold text-uppercase mb-1">A compléter plus tard</div>
+<div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
 
+</div>
 
+</div>
+</div>
+</div>
 
-            <!-- Std Att Card  -->
-            <?php 
-            $query1=mysqli_query($conn,"SELECT * from tblsupp where montant='0'  and DATE(dateTimeTaken) = CURDATE()");                       
-            $carot = mysqli_num_rows($query1);
-            ?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Carotés</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $carot ;?></div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fa fa-times fa-2x" style="color: red;"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<a class="scroll-to-top rounded" href="#page-top">
+<i class="fas fa-angle-up"></i>
+</a>
 
-        </div>
-            
-        <!---Container Fluid-->
-      </div>
-    </div>
-  </div>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="js/ruang-admin.min.js"></script>
 
-  <!-- Scroll to top -->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-
-  <script src="../vendor/jquery/jquery.min.js"></script>
-  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
-  <script src="js/ruang-admin.min.js"></script>
-  <script src="../vendor/chart.js/Chart.min.js"></script>
-  <script src="js/demo/chart-area-demo.js"></script>  
 </body>
-
 </html>

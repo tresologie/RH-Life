@@ -170,7 +170,7 @@ if($rowVerif && $rowVerif['heures'] > 0 && in_array($adNo, $check)){
 
 
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Ajouter les heures supplémentaires <b>Le <?php echo $todaysDate = date("d-m-Y");?></b></h1>
+            <h6 class="m-0 font-weight-bold text-primary">Ajouter les heures supplémentaires <b>Le <?php echo $todaysDate = date("d-m-Y");?></b></h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Accueil</a></li>
               <li class="breadcrumb-item active" aria-current="page">Tous les employés d'usine</li>

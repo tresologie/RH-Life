@@ -57,7 +57,7 @@
        <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrapcon"
           aria-expanded="true" aria-controls="collapseBootstrapcon">
-          <i class="fas fa-wallet" style="color: blue;"></i>
+          <i class="fas fa-clock fa-2x" style="color: blue;"></i>
           <span>Heures Supplémentaires</span>
         </a>
         <div id="collapseBootstrapcon" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
@@ -65,6 +65,7 @@
             <h6 class="collapse-header">Supplémentaires</h6>
             <a class="collapse-item" href="viewSuppSelect.php">Heures suppl(un employé)</a>
             <a class="collapse-item" href="viewSuppAll.php">Heures suppl(Tous)</a>
+            <a class="collapse-item" href="verifySuppAll.php">Verification Supplémentaires</a>
           </div>
         </div>
       </li>
@@ -83,10 +84,9 @@
         <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Salaire</h6>
-            
-            <a class="collapse-item" href="#">Salaire des employés</a>
-            <a class="collapse-item" href="#">Salaire des employés</a>
-            <a class="collapse-item" href="#">Salaire des employés</a>
+            <a class="collapse-item" href="addBankInfo.php">Ajouter les </br> info Bancaires </a>
+            <a class="collapse-item" href="viewBankInfo.php">Voir les nfo Bancaires</a>
+            <a class="collapse-item" href="salairePresences.php">Salaire des employés</a>
            
           </div>
         </div>

@@ -126,11 +126,9 @@ date_default_timezone_set('Africa/Bujumbura');
                         <th>Usine</th>
                         <th>Poste</th>
                         <th>Date</th>
-                        <th>Debut</th>
-                        <th>Fin</th>
                         <th>Heures</th>
                         <th>Montant</th>
-                        <th><i class='fas fa-fw fa-edit'></i></th>
+                        <th>Status</th>
                         
                       </tr>
                     </thead>
@@ -146,8 +144,7 @@ date_default_timezone_set('Africa/Bujumbura');
 
                        if($type == "1"){ //All Attendance
 
-                        $query = "SELECT tblsupp.Id, tblsupp.heureDebut,tblsupp.heureFin,
-                        FLOOR(tblsupp.montant / 100) * 100 AS montant,
+                        $query = "SELECT tblsupp.Id, FLOOR(tblsupp.montant / 100) * 100 AS montant,
                         tblsupp.dateTimeTaken, tblstudents.poste,tblclass.className,tblsupp.heures,
                         tblstudents.firstName,tblstudents.lastName,tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste
                         FROM tblsupp
@@ -161,8 +158,7 @@ date_default_timezone_set('Africa/Bujumbura');
 
                         $singleDate =  $_POST['singleDate'];
 
-                         $query = "SELECT tblsupp.Id,tblsupp.dateTimeTaken,tblsupp.heureDebut,tblsupp.heureFin,
-                         FLOOR(tblsupp.montant / 100) * 100 AS montant,
+                         $query = "SELECT tblsupp.Id,FLOOR(tblsupp.montant / 100) * 100 AS montant,
                           tblstudents.poste,tblclass.className,tblstudents.firstName,tblstudents.lastName,tblsupp.heures,
                           tblstudents.identite,tblstudents.admissionNumber,tblstudents.poste
                         FROM tblsupp
@@ -179,8 +175,7 @@ date_default_timezone_set('Africa/Bujumbura');
                          $fromDate =  $_POST['fromDate'];
                          $toDate =  $_POST['toDate'];
 
-                         $query = "SELECT tblsupp.Id,tblsupp.heureDebut,tblsupp.heureFin,
-                          FLOOR(tblsupp.montant / 100) * 100 AS montant,
+                         $query = "SELECT tblsupp.Id,FLOOR(tblsupp.montant / 100) * 100 AS montant,
                          tblsupp.dateTimeTaken, tblstudents.poste,tblclass.className,tblsupp.heures,
                         tblstudents.firstName,tblstudents.lastName,tblstudents.admissionNumber,tblstudents.poste
                         FROM tblattendance
@@ -210,11 +205,9 @@ date_default_timezone_set('Africa/Bujumbura');
                                 <td>".$rows['className']."</td>
                                 <td>".$rows['poste']."</td>
                                 <td>".$rows['dateTimeTaken']."</td>
-                                <td>" . date('H:i', strtotime($rows['heureDebut'])) . "</td>
-                                <td>" . date('H:i', strtotime($rows['heureFin'])) . "</td>
                                 <td>".$rows['heures']."</td>
                                 <td style='font-weight:bold;'>".number_format($rows['montant'], 0, ',', ' ')." Fbu</td>
-                                <td><a href='?action=edit&Id=".$rows['Id']."'><i class='fas fa-fw fa-edit'></i></a></td>
+                                <td>".$rows['status']."</td>
                               </tr>";
                           }
                       }

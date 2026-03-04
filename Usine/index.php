@@ -103,16 +103,13 @@ $carro = $query4 ? mysqli_num_rows($query4) : 0;
         <?php include "Includes/topbar.php";?>
 
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">
-              Statistiques du <?php echo $todaysDate; ?> <b><?php echo $rrw['className'];?></b>
-            </h1>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="./">Accueil</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Tableau de bord</li>
-            </ol>
+            
         </div>
 
         <div class="container-fluid" id="container-wrapper">
+        <h1 class="h3 mb-0 text-gray-800">
+              Statistiques du <?php echo $todaysDate; ?> <b><?php echo $rrw['className'];?></b>
+            </h1>
           <div class="row mb-3">
 
             <!-- Tous les Employés -->

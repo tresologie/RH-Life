@@ -35,8 +35,6 @@ session_start();
                 <h5 align ="center" ><b> HRMS-Life</b> </h5>
                   <div class="text-center">
                     <img src="img/logo/life.jpg" style="width:130px;height:130px;">
-                    <br>
-                    <h1 class="h4 text-gray-900 mb-3">Se connecter</h1>
                   </div>
                   <form class="user" method="Post" action="">
                   <div class="form-group">

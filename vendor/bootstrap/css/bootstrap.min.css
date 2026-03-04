@@ -1,4 +1,10 @@
-*/:root {
+/*!
+ * Bootstrap v4.3.1 (https://getbootstrap.com/)
+ * Copyright 2011-2019 The Bootstrap Authors
+ * Copyright 2011-2019 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+ :root {
     --blue: #6777EF;
     --indigo: #6610f2;
     --purple: #6f42c1;
@@ -46,7 +52,6 @@ article,aside,figcaption,figure,footer,header,hgroup,main,nav,section {
 }
 
 body {
-    overflow: hidden;
     margin: 0;
     font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     font-size: 1rem;
@@ -325,7 +330,7 @@ template {
 }
 
 .h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6 {
-    margin-left: 2.5rem;
+    margin-bottom: .5rem;
     font-weight: 400;
     line-height: 1.2
 }
@@ -540,8 +545,6 @@ pre code {
 }
 
 .container-fluid {
-    height: 78vh;
-    overflow-y: auto;
     width: 100%;
     padding-right: .75rem;
     padding-left: .75rem;
@@ -1777,14 +1780,14 @@ pre code {
 
 .table {
     width: 100%;
-    margin-bottom: .5rem;
+    margin-bottom: 1rem;
     color: #757575
 }
 
 .table td,.table th {
-    vertical-align: center;
-    border-top: 1px solid #e3e6f0;
-    border-right: 1px solid #e3e6f0;
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #e3e6f0
 }
 
 .table thead th {
@@ -1797,7 +1800,7 @@ pre code {
 }
 
 .table-sm td,.table-sm th {
-    padding: .2rem
+    padding: .3rem
 }
 
 .table-bordered {
@@ -2065,7 +2068,7 @@ pre code {
 .form-control {
     display: block;
     width: 100%;
-    height: calc(.9rem + 1rem + 7px);
+    height: calc(1.5em + .75rem + 7px);
     padding: .175rem .75rem;
     font-size: 1rem;
     font-weight: 400;
@@ -8632,7 +8635,7 @@ a.bg-dark:focus,a.bg-dark:hover,button.bg-dark:focus,button.bg-dark:hover {
 }
 
 .mb-3,.my-3 {
-    margin-bottom: .5rem!important
+    margin-bottom: 1rem!important
 }
 
 .ml-3,.mx-3 {
@@ -8652,7 +8655,7 @@ a.bg-dark:focus,a.bg-dark:hover,button.bg-dark:focus,button.bg-dark:hover {
 }
 
 .mb-4,.my-4 {
-    margin-bottom: .5rem!important
+    margin-bottom: 1.5rem!important
 }
 
 .ml-4,.mx-4 {
@@ -8664,7 +8667,7 @@ a.bg-dark:focus,a.bg-dark:hover,button.bg-dark:focus,button.bg-dark:hover {
 }
 
 .mt-5,.my-5 {
-    margin-top: 1rem!important
+    margin-top: 3rem!important
 }
 
 .mr-5,.mx-5 {

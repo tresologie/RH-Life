@@ -126,7 +126,7 @@ if(isset($_POST['save'])){
 
 
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Ajouter une usine</h1>
+        <h6 class="font-weight-bold text-primary" style="margin-left:30px">Ajouter une usine</h6>
 
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadUsines.php">Exporter</a>(Exel)</li>
@@ -139,15 +139,16 @@ if(isset($_POST['save'])){
               <li class="breadcrumb-item active" aria-current="page">Ajouter une usine</li>
             </ol>
           </div>
-        <!-- Container Fluid-->
+        
+            <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
-         
+       
 
-          <div class="row">
-            <div class="col-lg-12">
-              <!-- Form Basic -->
-              <div class="card mb-4">
-                <div class="card-body">
+       <div class="row">
+         <div class="col-lg-12">
+           <!-- Form Basic -->
+          
+           <div class="card mb-4 p-3">
                   <form method="post">
                     <div class="form-group row mb-3">
                         <div class="col-xl-6">
@@ -160,6 +161,7 @@ if(isset($_POST['save'])){
                     {
                     ?>
                     <button type="submit" name="update" class="btn btn-warning">Modifier</button>
+                    <a href="createClass.php" class="btn btn-secondary">Annuler</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php
                     } else {           
@@ -171,12 +173,15 @@ if(isset($_POST['save'])){
                   </form>
                 </div>
               </div>
-
-              <!-- Input Group -->
-                 <div class="row">
-              <div class="col-lg-12">
-                <div class="table-responsive p-3">
-                <h1 class="h3 mb-0 text-gray-800">Tous les Usines et leurs chefs</h1>
+              </div>
+        
+            <!-- Input Group -->
+               <div class="row">
+            <div class="col-lg-12">
+            <div class="card mb-4">
+              <div class="table-responsive p-3">
+              <?php echo $statusMsg; ?>
+                <h6 class="font-weight-bold text-primary">Tous les Usines et leurs chefs</h6>
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>

@@ -113,9 +113,9 @@ if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "edit") {
           }
 
           if ($query) {
-              $statusMsg = "<div class='alert alert-success' style='margin-right:700px;'>
-                  Le chef d'usine a été modifié avec succès !
-              </div>";
+            echo "<script type = \"text/javascript\">
+            window.location = (\"createClassTeacher.php\")
+            </script>"; 
           } else {
               $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>
                   Erreur lors de la mise à jour !
@@ -179,7 +179,7 @@ if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "edit") {
 
 
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Ajouter un chef d'usine</h1>
+        <h6 class="font-weight-bold text-primary" style="margin-left:30px">Ajouter un chef d'usine</h6>
 
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadUsines.php">Exporter</a>(Exel)</li>
@@ -262,6 +262,7 @@ if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "edit") {
                     {
                     ?>
                     <button type="submit" name="update" class="btn btn-warning">Modifier</button>
+                    <a href="createClassTeacher.php" class="btn btn-secondary">Annuler</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php
                     } else {           
@@ -273,15 +274,14 @@ if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "edit") {
                   </form>
                 </div>
               </div>
-
-              <!-- Input Group -->
-                 <div class="row">
-              <div class="col-lg-12">
-                <div class="table-responsive p-3">
-                <?php echo $statusMsg; ?>
-
-
-                <h1 class="h3 mb-0 text-gray-800">Tous les chefs et leurs usines assignées</h1>
+        
+            <!-- Input Group -->
+               <div class="row">
+            <div class="col-lg-12">
+            <div class="card mb-4">
+              <div class="table-responsive p-3">
+              <?php echo $statusMsg; ?>
+                <h6 class="font-weight-bold text-primary">Tous les chefs et leurs usines assignées</h1>
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>

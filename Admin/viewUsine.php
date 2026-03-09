@@ -39,7 +39,7 @@ date_default_timezone_set('Africa/Bujumbura');
 
 
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Liste des usines et leurs chefs</h1>
+        <h6 class="font-weight-bold text-primary" style="margin-left:30px">Liste des usines et leurs chefs</h6>
 
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadUsines.php">Exporter</a>(Exel)</li>
@@ -53,12 +53,19 @@ date_default_timezone_set('Africa/Bujumbura');
             </ol>
           </div>
 
-          
+                  <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+       
+        <div class="row">
+            <div class="col-lg-12">
+              <!-- Form Basic -->
 
 
               <!-- Input Group -->
                  <div class="row">
               <div class="col-lg-12">
+              <div class="card mb-4">
+                <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>
@@ -135,6 +142,19 @@ date_default_timezone_set('Africa/Bujumbura');
    <!-- Page level plugins -->
   <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script>
+$(document).ready(function () {
+  $('#dataTableHover').DataTable({
+        scrollX: true,
+        autoWidth: false,
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
+        }
+    });
+});
+</script>
 
 </body>
 

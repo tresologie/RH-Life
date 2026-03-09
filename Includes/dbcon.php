@@ -2,7 +2,7 @@
 	$host = "localhost";
 	$user = "root";
 	$pass = "";
-	$db = "rhmsystem";
+	$db = "hrmanagmentsystem";
 	
 	$conn = new mysqli($host, $user, $pass, $db);
 	if($conn->connect_error){

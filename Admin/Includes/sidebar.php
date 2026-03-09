@@ -40,36 +40,14 @@
         <div id="collapseBootstrap2" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Gérer les employés</h6>
-            <a class="collapse-item" href="createStudents.php">Ajouter un employé</a>
             <a class="collapse-item" href="viewStudents.php">Voir les employés</a>
-            <a class="collapse-item" href="viewStudentAttendance.php">Voir les présences</br>d'un employé</a>
             <a class="collapse-item" href="viewPresences.php">Présences de tous les</br> employés</a>
+            <a class="collapse-item" href="viewSuppAll.php">Heures suppl(Tous)</a>
+            <a class="collapse-item" href="#">Historique des </br> Heures supplémentaires</a>
            
           </div>
         </div>
       </li>
-
-      <hr class="sidebar-divider">
-      <div class="sidebar-heading">
-       Supplémentaires
-      </div>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrapcon"
-          aria-expanded="true" aria-controls="collapseBootstrapcon">
-          <i class="fas fa-clock fa-2x" style="color: blue;"></i>
-          <span>Heures Supplémentaires</span>
-        </a>
-        <div id="collapseBootstrapcon" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Supplémentaires</h6>
-            <a class="collapse-item" href="viewSuppSelect.php">Heures suppl(un employé)</a>
-            <a class="collapse-item" href="viewSuppAll.php">Heures suppl(Tous)</a>
-            <a class="collapse-item" href="verifySuppAll.php">Verification Supplémentaires</a>
-          </div>
-        </div>
-      </li>
-
 
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
@@ -79,14 +57,14 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePage" aria-expanded="true"
           aria-controls="collapsePage">
           <i class="fas fa-money-bill fa-2x" style="color: blue;"></i>
-          <span>Gérer les les salaires</span>
+          <span>Informations Banquaires</span>
         </a>
         <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Salaire</h6>
-            <a class="collapse-item" href="addBankInfo.php">Ajouter les </br> info Bancaires </a>
             <a class="collapse-item" href="viewBankInfo.php">Voir les nfo Bancaires</a>
             <a class="collapse-item" href="salairePresences.php">Salaire des employés</a>
+            <a class="collapse-item" href="#">Historique des salaires</a>
            
           </div>
         </div>
@@ -101,12 +79,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
           aria-expanded="true" aria-controls="collapseBootstrap">
           <i class="fas fa-chalkboard" style="color: blue;"></i>
-          <span>Gérer les usines</span>
+          <span>Gérer l'entreprise</span>
         </a>
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Gérer les usines</h6>
+            <h6 class="collapse-header">Life compony </h6>
             <a class="collapse-item" href="createClass.php">Ajouter une usine</a>
+            <a class="collapse-item" href="createDirector.php">Ajouter un Directeur</a>
             <a class="collapse-item" href="createClassTeacher.php">Ajouter un chef</a>
             <a class="collapse-item" href="viewUsine.php">Liste des usines</br> et leurs chefs</a>
           

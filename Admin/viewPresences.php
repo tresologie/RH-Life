@@ -70,8 +70,11 @@ if(date('d') >= 28){
         <!-- TopBar -->
        <?php include "Includes/topbar.php";?>
         <!-- Topbar -->
+        <div class="container-fluid" id="container-wrapper">
+
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Présences des employés</h1>
+        <h6 class="font-weight-bold text-primary" style="margin-left:30px">Présences des employés</h6>
+
 
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
@@ -88,8 +91,6 @@ if(date('d') >= 28){
               <li class="breadcrumb-item active" aria-current="page">Présences</li>
             </ol>
           </div>
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
         
 
           <div class="row">
@@ -125,7 +126,7 @@ if(date('d') >= 28){
               <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="table-responsive p-3">
-                  <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+                <table class="table table-bordered table-hover table-sm" id="dataTableHover">
 
                   <?php
 
@@ -202,12 +203,14 @@ ORDER BY tblclass.className, tblstudents.firstName ASC";
 }
   // Trier et limiter dates à 7 max
   ksort($dates);
+  $sn=0;
 
   // Affichage du tableau
   if(!empty($data)){
 
       echo "<thead class='thead-light'>";
       echo "<tr>";
+      echo "<th>#</th>";
       echo "<th>Nom & Prenom</th>";
       echo "<th>Badge</th>";
       echo "<th>Usine</th>";
@@ -221,8 +224,10 @@ ORDER BY tblclass.className, tblstudents.firstName ASC";
       foreach($data as $emp => $info){
 
         $totalP = 0;
+        $sn = $sn + 1;
     
         echo "<tr>";
+        echo "<td>$sn</td>";
         echo "<td>".$info['name']."</td>";
         echo "<td>".$info['badge']."</td>";
         echo "<td>".$info['usine']."</td>";

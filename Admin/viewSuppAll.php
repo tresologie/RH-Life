@@ -138,7 +138,7 @@ foreach($data as $emp => $info){
         <!-- Topbar -->
         
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Heures supplémentaires de cette semaine</h1>
+        <h6 class="font-weight-bold text-primary" style="margin-left:30px">Heures supplémentaires de cette semaine</h6>
 
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadSuppl.php?from=<?php echo $fromDate;?>
@@ -199,7 +199,7 @@ foreach($data as $emp => $info){
               <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="table-responsive p-3">
-                  <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+                <table class="table table-bordered table-hover table-sm" id="dataTableHover">
 
                   <?php
 
@@ -210,7 +210,6 @@ foreach($data as $emp => $info){
       echo "<thead class='thead-light'>";
       echo "<tr>";
       echo "<th>Nom & Prenom</th>";
-      echo "<th>Badge</th>";
       echo "<th>Usine</th>";
       echo "<th>Poste</th>";
 
@@ -227,7 +226,6 @@ foreach($data as $emp => $info){
 
           echo "<tr>";
           echo "<td  ><b>".$info['name']." ".$row['identite']."</b></br>".$info['identite']."</td>";
-          echo "<td>".$info['badge']."</td>";
           echo "<td>".$info['usine']."</td>";
           echo "<td>".$info['poste']."</td>";
 

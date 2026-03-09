@@ -32,7 +32,7 @@ date_default_timezone_set('Africa/Bujumbura');
         <div class="container-fluid" id="container-wrapper">
           
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Informations bancaires des employés</h1>
+          <h6 class="font-weight-bold text-primary">Liste complète des comptes bancaires</h6>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="downloadSuppl.php?from=<?php echo $fromDate;?>
               &to=<?php echo $toDate;?>" >Exporter</a>(Exel)</li>
@@ -47,10 +47,6 @@ date_default_timezone_set('Africa/Bujumbura');
 
           <!-- Carte principale -->
           <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 class="m-0 font-weight-bold text-primary">Liste complète des comptes bancaires</h6>
-              
-            </div>
             
             <div class="card-body">
               <div class="table-responsive">
@@ -58,8 +54,7 @@ date_default_timezone_set('Africa/Bujumbura');
                   <thead class="thead-light">
                     <tr>
                       <th>#</th>
-                      <th>Employé</th>
-                      
+                      <th>Employé</th> 
                       <th>Identité</th>
                       <th>Banque</th>
                       <th>N° Compte</th>

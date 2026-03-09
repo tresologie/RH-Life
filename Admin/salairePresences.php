@@ -44,7 +44,7 @@ $joursPeriode = (strtotime($toDate) - strtotime($fromDate)) / 86400 + 1;
       <div class="container-fluid" id="container-wrapper">
 
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h6 class="m-0 font-weight-bold text-primary">Détail des présences et salaires</h6>
+            <h6 class="font-weight-bold text-primary">Détail des présences et salaires</h6>
           
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="./">Accueil</a></li>
@@ -108,6 +108,7 @@ $joursPeriode = (strtotime($toDate) - strtotime($fromDate)) / 86400 + 1;
                       // Calcul salaire : proportion des présences
                       $tauxPresence = $joursPeriode > 0 ? $pres / $joursPeriode : 0;
                       $salaireCalcule = round($salaireBase * $tauxPresence);
+                      $salaireCalcule = floor($salaireCalcule / 100) * 100;
 
                       echo "<tr>";
                       echo "<td class='text-center'>$sn</td>";

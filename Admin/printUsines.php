@@ -23,24 +23,71 @@ $html = '<!DOCTYPE html>
 <html>
 <head>
 <style>
-body { font-family: Arial, sans-serif; font-size: 12px; }
-table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-th, td { border: 1px solid #000; padding: 5px; text-align: left; }
-th { background-color: #ccc; }
-.title { text-align: center; font-size: 16px; font-weight: bold; text-decoration: underline; margin-top: 10px; }
-.header-table td { border: none; }
+body { 
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 11px; 
+    margin: 15px; 
+}
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px; 
+    border-bottom: 2px solid #6366f1; 
+    padding-bottom: 10px; 
+}
+.logo { 
+    font-size: 18px; 
+    font-weight: bold; 
+    color: #4f46e5; 
+}
+.title { 
+    text-align: center; 
+    text-decoration: underline;
+    font-size: 16px; 
+    font-weight: bold; 
+    margin: 10px 0 20px; 
+}
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 10px; 
+}
+th, td { 
+    border: 1px solid #000; 
+    padding: 6px 8px; 
+    text-align: left; 
+}
+th { 
+    background-color: #e0e7ff; 
+    font-weight: bold; 
+    text-align: center; 
+}
+tr:nth-child(even) { 
+    background-color: #f8fafc; 
+}
+.total-row { 
+    font-weight: bold; 
+    background-color: #e0e7ff !important; 
+}
+.center { text-align: center; }
+.right { text-align: right; }
+.footer { 
+    margin-top: 30px; 
+    text-align: center; 
+    font-size: 10px; 
+    color: #64748b; 
+}
 </style>
 </head>
-<body>';
+<body>
 
-// En-tête
-$html .= '
-<table class="header-table">
-<tr>
-    <td><strong>Life Company</strong></td>
-    <td style="text-align:right;">Le '.$todaysDate.'</td>
-</tr>
-</table>
+<div class="header">
+<div class="logo">Life Company</div>
+<div>
+    <strong>Le ' . date("d/m/Y") . '</strong>
+</div>
+</div>
 
 <div class="title">Liste de tous les usines et chefs de Life Company</div>
 ';

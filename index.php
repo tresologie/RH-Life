@@ -40,7 +40,8 @@ session_start();
                   <div class="form-group">
                   <select required name="userType" class="form-control mb-3">
                           <option value="">--Votre Role--</option>
-                          <option value="Administrator">Directeur</option>
+                          <option value="Administrator">Administrateur</option>
+                          <option value="Directeur">Directeur</option>
                           <option value="ClassTeacher">Chef d'Usine</option>
                         </select>
                     </div>
@@ -91,6 +92,34 @@ session_start();
 
       }
     }
+    else if($userType == "Directeur"){
+
+      $query = "SELECT * FROM tbldirector WHERE emailAddress = '$username' AND password = '$password'";
+      $rs = $conn->query($query);
+      $num = $rs->num_rows;
+      $rows = $rs->fetch_assoc();
+
+      if($num > 0){
+
+        $_SESSION['userId'] = $rows['Id'];
+        $_SESSION['firstName'] = $rows['firstName'];
+        $_SESSION['lastName'] = $rows['lastName'];
+        $_SESSION['emailAddress'] = $rows['emailAddress'];
+
+
+        echo "<script type = \"text/javascript\">
+        window.location = (\"Directeur/index.php\")
+        </script>";
+      }
+
+      else{
+
+        echo "<div class='alert alert-danger' role='alert'>
+        Email ou mot de passe invalide!
+        </div>";
+
+      }
+    }
     else if($userType == "ClassTeacher"){
 
       $query = "SELECT * FROM tblclassteacher WHERE emailAddress = '$username' AND password = '$password'";
@@ -107,7 +136,7 @@ session_start();
         $_SESSION['classId'] = $rows['classId'];
 
         echo "<script type = \"text/javascript\">
-        window.location = (\"Usine/index.php\")
+        window.location = (\"Chef/index.php\")
         </script>";
       }
 

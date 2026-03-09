@@ -60,6 +60,7 @@ $html = '
         }
         .title { 
             text-align: center; 
+            text-decoration: underline;
             font-size: 16px; 
             font-weight: bold; 
             margin: 10px 0 20px; 

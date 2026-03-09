@@ -7,7 +7,6 @@ date_default_timezone_set('Africa/Bujumbura');
 $todaysDate = date("d-m-Y");
 $dateSQL    = date("Y-m-d");
 
-// ===================== STATISTIQUES EMPLOYÉS (1 SEULE REQUÊTE) =====================
 $statsQuery = mysqli_query($conn,"
 SELECT 
     COUNT(*) as total,
@@ -22,7 +21,7 @@ $students = $stats['total'] ?? 0;
 $hommes   = $stats['hommes'] ?? 0;
 $femmes   = $stats['femmes'] ?? 0;
 
-// ===================== ABANDONS =====================
+
 $abandonQuery = mysqli_query($conn,"
 SELECT admissionNo
 FROM tblattendance
@@ -33,7 +32,6 @@ HAVING COUNT(*) >= 5
 
 $abandon = mysqli_num_rows($abandonQuery);
 
-// ===================== PRÉSENCE DU JOUR =====================
 $presenceQuery = mysqli_query($conn,"
 SELECT COUNT(*) as total 
 FROM tblattendance 
@@ -46,7 +44,7 @@ $totAttendance = $rowPresence['total'] ?? 0;
 
 $absent = $students - $totAttendance;
 
-// ===================== MONTANT À PAYER =====================
+
 $payerQuery = mysqli_query($conn,"
 SELECT SUM(FLOOR(montant/100)*100) as total
 FROM tblsupp
@@ -55,6 +53,10 @@ WHERE DATE(dateTimeTaken)='$dateSQL'
 
 $rowPayer = mysqli_fetch_assoc($payerQuery);
 $payer = $rowPayer['total'] ?? 0;
+
+
+$query1=mysqli_query($conn,"SELECT * from tblsupp where montant='0'  and DATE(dateTimeTaken) = CURDATE()");                       
+            $carot = mysqli_num_rows($query1);
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +83,9 @@ $payer = $rowPayer['total'] ?? 0;
 <?php include "Includes/topbar.php";?>
 
 <div class="container-fluid" id="container-wrapper">
-
+<h6 class=" font-weight-bold text-primary">
+ <b>Directeur Général</b> - Le <?php echo $todaysDate; ?> 
+    </h6>
 <hr class="sidebar-divider">
 
 <div class="row mb-3">
@@ -96,7 +100,7 @@ $payer = $rowPayer['total'] ?? 0;
 <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $students; ?></div>
 </div>
 <div class="col-auto">
-<i class="fas fa-users fa-2x" style="color: blue;"></i>
+<i class="fas fa-users fa-3x" style="color: blue;"></i>
 </div>
 </div>
 </div>
@@ -113,7 +117,7 @@ $payer = $rowPayer['total'] ?? 0;
 <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $hommes; ?></div>
 </div>
 <div class="col-auto">
-<i class="fas fa-male fa-2x"></i>
+<i class="fas fa-male fa-4x text-success"></i>
 </div>
 </div>
 </div>
@@ -130,7 +134,7 @@ $payer = $rowPayer['total'] ?? 0;
 <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $femmes; ?></div>
 </div>
 <div class="col-auto">
-<i class="fas fa-female fa-2x"></i>
+<i class=" text-danger fas fa-female fa-4x"></i>
 </div>
 </div>
 </div>
@@ -147,7 +151,7 @@ $payer = $rowPayer['total'] ?? 0;
 <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $abandon; ?></div>
 </div>
 <div class="col-auto">
-<i class="fa fa-cut fa-2x" style="color: red;"></i>
+<i class="fa fa-cut fa-2x"></i>
 </div>
 </div>
 </div>
@@ -155,8 +159,6 @@ $payer = $rowPayer['total'] ?? 0;
 </div>
 
 </div>
-
-<hr class="sidebar-divider">
 
 <div class="row mb-3">
 
@@ -172,7 +174,7 @@ $payer = $rowPayer['total'] ?? 0;
 </div>
 </div>
 <div class="col-auto">
-<i class="fas fa-money-bill fa-2x" style="color: blue;"></i>
+<i class="fas fa-money-bill fa-3x" style="color: blue;"></i>
 </div>
 </div>
 </div>
@@ -189,7 +191,7 @@ $payer = $rowPayer['total'] ?? 0;
 <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totAttendance; ?></div>
 </div>
 <div class="col-auto">
-<i class="fas fa-calendar-check fa-2x text-success"></i>
+<i class="fas fa-calendar-check fa-3x text-success"></i>
 </div>
 </div>
 </div>
@@ -206,30 +208,33 @@ $payer = $rowPayer['total'] ?? 0;
 <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $absent; ?></div>
 </div>
 <div class="col-auto">
-<i class="fas fa-user-times fa-2x text-secondary"></i>
+<i class="fas fa-user-times fa-3x text-danger"></i>
 </div>
 </div>
 </div>
 </div>
 </div>
 
-<!-- Placeholder -->
-<div class="col-xl-3 col-md-6 mb-4">
-<div class="card h-100">
-<div class="card-body">
-<div class="row no-gutters align-items-center">
-<div class="col mr-2">
-<div class="text-xs font-weight-bold text-uppercase mb-1">A compléter plus tard</div>
-<div class="h5 mb-0 font-weight-bold text-gray-800"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
+   <!-- Employés carotés -->
+   <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1">Carrotés</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $carot; ?></div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fa fa-times fa-3x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
 </div>
-
 </div>
+<?php include "Includes/footer.php";?>
 </div>
 </div>
 

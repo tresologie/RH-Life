@@ -47,7 +47,7 @@ $query = "SELECT tblclass.className
        <?php include "Includes/topbar.php";?>
         <!-- Topbar -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Tous les employés</h1>
+        <h6 class="font-weight-bold text-primary" style="margin-left:30px">Tous les employés</h6>
 
 
             <ol class="breadcrumb">
